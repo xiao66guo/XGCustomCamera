@@ -24,6 +24,11 @@
 
 #pragma mark - 布局相机底部的按钮
 -(void)layoutCameraBottomWithBtn{
+    UIView *topView = [UIView new];
+    topView.backgroundColor = [UIColor whiteColor];
+    topView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.85);
+    [self.view addSubview:topView];
+    
     // 拍照按钮
     UIButton *patPic = [UIButton new];
     [patPic setTitle:@"✓" forState:UIControlStateNormal];
@@ -44,6 +49,7 @@
     CGFloat closeDetal = (patPicH - closeBtnH)* 0.5;
     closeBtn.frame = CGRectMake(16, patPic.y + closeDetal, closeBtnW, closeBtnH);
     [self.view addSubview:closeBtn];
+    [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
     // 镜头旋转按钮
     UIButton *camChangeBtn = [UIButton new];
@@ -62,8 +68,11 @@
     shareBtn.hidden = YES;
     [self.view addSubview:shareBtn];
 
-    
-    
+}
+
+#pragma mark - 关闭相机界面
+-(void)dissWithCameraVC{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - 隐藏状态栏
