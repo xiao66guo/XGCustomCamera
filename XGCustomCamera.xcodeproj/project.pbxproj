@@ -127,6 +127,7 @@
 				TargetAttributes = {
 					DB5C67991DF6DEFD009FEA92 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 24T58AANZ9;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -282,9 +283,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 24T58AANZ9;
 				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -295,9 +297,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 24T58AANZ9;
 				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";

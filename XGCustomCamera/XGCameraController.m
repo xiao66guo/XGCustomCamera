@@ -7,12 +7,21 @@
 //
 
 #import "XGCameraController.h"
-
+#import <AVFoundation/AVFoundation.h>
 @interface XGCameraController ()
 
 @end
 
-@implementation XGCameraController
+@implementation XGCameraController{
+    // 拍摄会话
+    AVCaptureSession            *_captureSession;
+    // 输入设备 - 摄像头
+    AVCaptureDeviceInput        *_inputDevice;
+    // 图像输出
+    AVCaptureStillImageOutput   *_imageOutPut;
+    // 取景视图
+    AVCaptureVideoPreviewLayer  *_previewLayer;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -20,6 +29,24 @@
     
     // 布局相机底部的按钮
     [self layoutCameraBottomWithBtn];
+    
+    // 设置拍摄会话
+    [self setupCaptureSession];
+}
+#pragma mark - 相机的拍摄方法
+#pragma mark - 设置拍摄的会话内容
+-(void)setupCaptureSession{
+    // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
+    NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+//     取出后置摄像头
+    AVCaptureDevice *device;
+    for (AVCaptureDevice *obj in deviceArray) {
+        if (obj.position == AVCaptureDevicePositionBack) {
+            device = obj;
+            break;
+        }
+    }
+    _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
 }
 
 #pragma mark - 布局相机底部的按钮
