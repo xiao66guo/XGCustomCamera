@@ -12,6 +12,7 @@
 		DB5C67AA1DF6DEFD009FEA92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */; };
 		DB5C67AD1DF6DEFD009FEA92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */; };
 		DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */; };
+		DB5C67B91DF6F47D009FEA92 /* XGCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,8 @@
 		DB5C67AE1DF6DEFD009FEA92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB5C67B41DF6DF89009FEA92 /* XGMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGMainViewController.h; sourceTree = "<group>"; };
 		DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGMainViewController.m; sourceTree = "<group>"; };
+		DB5C67B71DF6F47D009FEA92 /* XGCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGCameraController.h; sourceTree = "<group>"; };
+		DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGCameraController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,8 @@
 				DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */,
 				DB5C67B41DF6DF89009FEA92 /* XGMainViewController.h */,
 				DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */,
+				DB5C67B71DF6F47D009FEA92 /* XGCameraController.h */,
+				DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */,
 				DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */,
 				DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */,
 				DB5C67AE1DF6DEFD009FEA92 /* Info.plist */,
@@ -149,6 +154,7 @@
 				DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */,
 				DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */,
 				DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */,
+				DB5C67B91DF6F47D009FEA92 /* XGCameraController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

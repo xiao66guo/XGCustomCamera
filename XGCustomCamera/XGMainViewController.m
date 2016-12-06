@@ -7,7 +7,7 @@
 //
 
 #import "XGMainViewController.h"
-
+#import "XGCameraController.h"
 @interface XGMainViewController ()
 
 @end
@@ -36,6 +36,7 @@
 
 #pragma mark - 打开相机的方法
 -(void)openCamera{
-    NSLog(@"打开相机");
+    XGCameraController *cameraVC = [XGCameraController new];
+    [self presentViewController:cameraVC animated:YES completion:nil];
 }
 @end
