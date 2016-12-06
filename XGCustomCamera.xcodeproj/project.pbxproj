@@ -13,6 +13,7 @@
 		DB5C67AD1DF6DEFD009FEA92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */; };
 		DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */; };
 		DB5C67B91DF6F47D009FEA92 /* XGCameraController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */; };
+		DB5C67BE1DF6FFFB009FEA92 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67BD1DF6FFFB009FEA92 /* UIView+Extension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,9 @@
 		DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGMainViewController.m; sourceTree = "<group>"; };
 		DB5C67B71DF6F47D009FEA92 /* XGCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGCameraController.h; sourceTree = "<group>"; };
 		DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGCameraController.m; sourceTree = "<group>"; };
+		DB5C67BA1DF6F8D4009FEA92 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		DB5C67BC1DF6FFFB009FEA92 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		DB5C67BD1DF6FFFB009FEA92 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,7 @@
 		DB5C679C1DF6DEFD009FEA92 /* XGCustomCamera */ = {
 			isa = PBXGroup;
 			children = (
+				DB5C67BB1DF6FFB7009FEA92 /* Tool */,
 				DB5C67A01DF6DEFD009FEA92 /* AppDelegate.h */,
 				DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */,
 				DB5C67B41DF6DF89009FEA92 /* XGMainViewController.h */,
@@ -68,6 +73,7 @@
 				DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */,
 				DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */,
 				DB5C67AE1DF6DEFD009FEA92 /* Info.plist */,
+				DB5C67BA1DF6F8D4009FEA92 /* PrefixHeader.pch */,
 				DB5C679D1DF6DEFD009FEA92 /* Supporting Files */,
 			);
 			path = XGCustomCamera;
@@ -79,6 +85,15 @@
 				DB5C679E1DF6DEFD009FEA92 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DB5C67BB1DF6FFB7009FEA92 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				DB5C67BC1DF6FFFB009FEA92 /* UIView+Extension.h */,
+				DB5C67BD1DF6FFFB009FEA92 /* UIView+Extension.m */,
+			);
+			name = Tool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,6 +166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB5C67BE1DF6FFFB009FEA92 /* UIView+Extension.m in Sources */,
 				DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */,
 				DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */,
 				DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */,
@@ -266,6 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -278,6 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
