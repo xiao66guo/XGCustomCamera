@@ -88,18 +88,39 @@
 -(AVCaptureDevice *)captureChangeDevice{
     // 获得当前输入设备的摄像头的位置
     AVCaptureDevicePosition position = _inputDevice.device.position;
+    
     position = (position != AVCaptureDevicePositionBack) ? AVCaptureDevicePositionBack : AVCaptureDevicePositionFront;
     // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
     NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     //     取出后置摄像头
     AVCaptureDevice *device;
     for (AVCaptureDevice *obj in deviceArray) {
-        if (obj.position == AVCaptureDevicePositionBack) {
+        if (obj.position == position) {
             device = obj;
             break;
         }
     }
     return device;
+}
+#pragma mark - 镜头切换按钮的实现方法
+-(void)switchCapture{
+    
+    AVCaptureDevice *device = [self captureChangeDevice];
+    // 创建输入设备
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
+    // 停止之前的输入设备
+    [self stopCapture];
+    
+    // 删除之前的输入设备(如果要添加输入设备，需要将之前的输入设备删除，否则后面的输入设备将添加不进来)
+    [_captureSession removeInput:_inputDevice];
+    // 判断设备是否能被切换
+    if ([_captureSession canAddInput:input]) {
+        _inputDevice = input;
+    }
+    // 添加到会话
+    [_captureSession addInput:_inputDevice];
+    // 重新开启会话
+    [self startCapture];
 }
 
 #pragma mark - 布局相机底部的按钮
@@ -107,7 +128,7 @@
     // 预览视图
     UIView *previewView = [UIView new];
     previewView.backgroundColor = [UIColor whiteColor];
-    previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.85);
+    previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.83);
     [self.view addSubview:previewView];
     _previewView = previewView;
     
@@ -141,6 +162,7 @@
     [camChangeBtn setImage:camChangeImage forState:UIControlStateNormal];
     camChangeBtn.frame = CGRectMake(ScreenW - 16 - camChangeW, closeBtn.y, camChangeW, camChangeH);
     [self.view addSubview:camChangeBtn];
+    [camChangeBtn addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
     
     // 分享按钮
     UIButton *shareBtn = [UIButton new];
