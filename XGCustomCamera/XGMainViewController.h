@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  XGMainViewController.h
 //  XGCustomCamera
 //
 //  Created by 小果 on 2016/12/6.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface XGMainViewController : UIViewController
 
 @end
-

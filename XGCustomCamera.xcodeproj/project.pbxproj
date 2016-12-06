@@ -9,10 +9,9 @@
 /* Begin PBXBuildFile section */
 		DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C679E1DF6DEFD009FEA92 /* main.m */; };
 		DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */; };
-		DB5C67A51DF6DEFD009FEA92 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67A41DF6DEFD009FEA92 /* ViewController.m */; };
-		DB5C67A81DF6DEFD009FEA92 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67A61DF6DEFD009FEA92 /* Main.storyboard */; };
 		DB5C67AA1DF6DEFD009FEA92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */; };
 		DB5C67AD1DF6DEFD009FEA92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */; };
+		DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,12 +19,11 @@
 		DB5C679E1DF6DEFD009FEA92 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DB5C67A01DF6DEFD009FEA92 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		DB5C67A31DF6DEFD009FEA92 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		DB5C67A41DF6DEFD009FEA92 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		DB5C67A71DF6DEFD009FEA92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB5C67AC1DF6DEFD009FEA92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DB5C67AE1DF6DEFD009FEA92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB5C67B41DF6DF89009FEA92 /* XGMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGMainViewController.h; sourceTree = "<group>"; };
+		DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGMainViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +58,8 @@
 			children = (
 				DB5C67A01DF6DEFD009FEA92 /* AppDelegate.h */,
 				DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */,
-				DB5C67A31DF6DEFD009FEA92 /* ViewController.h */,
-				DB5C67A41DF6DEFD009FEA92 /* ViewController.m */,
-				DB5C67A61DF6DEFD009FEA92 /* Main.storyboard */,
+				DB5C67B41DF6DF89009FEA92 /* XGMainViewController.h */,
+				DB5C67B51DF6DF89009FEA92 /* XGMainViewController.m */,
 				DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */,
 				DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */,
 				DB5C67AE1DF6DEFD009FEA92 /* Info.plist */,
@@ -139,7 +136,6 @@
 			files = (
 				DB5C67AD1DF6DEFD009FEA92 /* LaunchScreen.storyboard in Resources */,
 				DB5C67AA1DF6DEFD009FEA92 /* Assets.xcassets in Resources */,
-				DB5C67A81DF6DEFD009FEA92 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,8 +146,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB5C67A51DF6DEFD009FEA92 /* ViewController.m in Sources */,
 				DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */,
+				DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */,
 				DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,14 +155,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		DB5C67A61DF6DEFD009FEA92 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DB5C67A71DF6DEFD009FEA92 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -273,6 +261,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -284,6 +273,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";

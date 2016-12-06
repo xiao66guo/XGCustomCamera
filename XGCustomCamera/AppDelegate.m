@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "XGMainViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -16,7 +16,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    XGMainViewController *mainVC = [[XGMainViewController alloc] init];
+    mainVC.title = @"自定义相机";
+    mainVC.view.backgroundColor = [UIColor magentaColor];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mainVC];
+    _window.rootViewController = nav;
+    [_window makeKeyAndVisible];
     return YES;
 }
 
