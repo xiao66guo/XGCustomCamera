@@ -18,7 +18,7 @@
     // 输入设备 - 摄像头
     AVCaptureDeviceInput        *_inputDevice;
     // 图像输出
-    AVCapturePhotoOutput   *_imageOutPut;
+    AVCaptureStillImageOutput   *_imageOutPut;
     // 取景视图
     AVCaptureVideoPreviewLayer  *_previewLayer;
     // 预览视图
@@ -60,7 +60,7 @@
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
     // 输出图像
-    _imageOutPut = [AVCapturePhotoOutput new];
+    _imageOutPut = [AVCaptureStillImageOutput new];
     // 拍摄会话
     _captureSession = [AVCaptureSession new];
     
@@ -84,6 +84,9 @@
     
     // 添加图层到预览视图
     [_previewView.layer addSublayer:_previewLayer];
+    
+    // 设置取景框的拉伸效果
+    _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
     // 开始拍摄
     [self startCapture];
