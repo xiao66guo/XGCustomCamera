@@ -18,9 +18,11 @@
     // 输入设备 - 摄像头
     AVCaptureDeviceInput        *_inputDevice;
     // 图像输出
-    AVCaptureStillImageOutput   *_imageOutPut;
+    AVCapturePhotoOutput   *_imageOutPut;
     // 取景视图
     AVCaptureVideoPreviewLayer  *_previewLayer;
+    // 预览视图
+    UIView                      *_previewView;
 }
 
 - (void)viewDidLoad {
@@ -34,6 +36,14 @@
     [self setupCaptureSession];
 }
 #pragma mark - 相机的拍摄方法
+#pragma mark - 开始拍摄
+-(void)startCapture{
+    [_captureSession startRunning];
+}
+#pragma mark - 停止拍摄
+-(void)stopCapture{
+    [_captureSession stopRunning];
+}
 #pragma mark - 设置拍摄的会话内容
 -(void)setupCaptureSession{
     // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
@@ -46,15 +56,47 @@
             break;
         }
     }
+    // 输入设备
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
+    
+    // 输出图像
+    _imageOutPut = [AVCapturePhotoOutput new];
+    // 拍摄会话
+    _captureSession = [AVCaptureSession new];
+    
+    // 将输入和输出添加到拍摄会话
+    if (![_captureSession canAddInput:_inputDevice]) {
+        NSLog(@"无法添加输入设备");
+        return;
+    }
+    if (![_captureSession canAddOutput:_imageOutPut]) {
+        NSLog(@"无法添加输出设备");
+        return;
+    }
+    
+    [_captureSession addInput:_inputDevice];
+    [_captureSession addOutput:_imageOutPut];
+    
+    // 设置预览图层
+    _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
+    // 指定预览图层的大小
+    _previewLayer.frame = _previewView.frame;
+    
+    // 添加图层到预览视图
+    [_previewView.layer addSublayer:_previewLayer];
+    
+    // 开始拍摄
+    [self startCapture];
 }
 
 #pragma mark - 布局相机底部的按钮
 -(void)layoutCameraBottomWithBtn{
-    UIView *topView = [UIView new];
-    topView.backgroundColor = [UIColor whiteColor];
-    topView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.85);
-    [self.view addSubview:topView];
+    // 预览视图
+    UIView *previewView = [UIView new];
+    previewView.backgroundColor = [UIColor whiteColor];
+    previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.85);
+    [self.view addSubview:previewView];
+    _previewView = previewView;
     
     // 拍照按钮
     UIButton *patPic = [UIButton new];
