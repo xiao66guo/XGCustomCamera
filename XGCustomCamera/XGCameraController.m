@@ -18,7 +18,7 @@
     // 输入设备 - 摄像头
     AVCaptureDeviceInput        *_inputDevice;
     // 图像输出
-    AVCaptureStillImageOutput   *_imageOutPut;
+    AVCapturePhotoOutput   *_imageOutPut;
     // 取景视图
     AVCaptureVideoPreviewLayer  *_previewLayer;
     // 预览视图
@@ -46,21 +46,14 @@
 }
 #pragma mark - 设置拍摄的会话内容
 -(void)setupCaptureSession{
-    // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
-    NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-//     取出后置摄像头
-    AVCaptureDevice *device;
-    for (AVCaptureDevice *obj in deviceArray) {
-        if (obj.position == AVCaptureDevicePositionBack) {
-            device = obj;
-            break;
-        }
-    }
+    // 摄像头的切换
+    AVCaptureDevice *device = [self captureChangeDevice];
+    
     // 输入设备
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
     // 输出图像
-    _imageOutPut = [AVCaptureStillImageOutput new];
+    _imageOutPut = [AVCapturePhotoOutput new];
     // 拍摄会话
     _captureSession = [AVCaptureSession new];
     
@@ -90,6 +83,23 @@
     
     // 开始拍摄
     [self startCapture];
+}
+#pragma mark - 切换摄像头(如果_inputDevice没有值，默认返回后置摄像头）
+-(AVCaptureDevice *)captureChangeDevice{
+    // 获得当前输入设备的摄像头的位置
+    AVCaptureDevicePosition position = _inputDevice.device.position;
+    position = (position != AVCaptureDevicePositionBack) ? AVCaptureDevicePositionBack : AVCaptureDevicePositionFront;
+    // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
+    NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    //     取出后置摄像头
+    AVCaptureDevice *device;
+    for (AVCaptureDevice *obj in deviceArray) {
+        if (obj.position == AVCaptureDevicePositionBack) {
+            device = obj;
+            break;
+        }
+    }
+    return device;
 }
 
 #pragma mark - 布局相机底部的按钮
