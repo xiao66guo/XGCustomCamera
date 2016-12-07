@@ -23,6 +23,10 @@
     AVCaptureVideoPreviewLayer  *_previewLayer;
     // 预览视图
     UIView                      *_previewView;
+    // 水印图片
+    UIImageView                 *_waterPicture;
+    // 水印文字
+    UILabel                     *_waterLable;
 }
 
 - (void)viewDidLoad {
@@ -31,6 +35,9 @@
     
     // 布局相机底部的按钮
     [self layoutCameraBottomWithBtn];
+    
+    // 添加水印图片
+    [self addWaterMarkPictureAndText];
     
     // 设置拍摄会话
     [self setupCaptureSession];
@@ -159,13 +166,17 @@
         UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0);
         // 绘制图像
         [image drawInRect:CGRectInset(rect, 0, -offset)];
+        // 绘制水印图像
+        [_waterPicture.image drawInRect:_waterPicture.frame];
+        // 绘制水印文字
+        [_waterLable.attributedText drawInRect:_waterLable.frame];
         // 从图像上下文中获取绘制的结果
-        UIImage *endImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
         // 关闭图像上下文
         UIGraphicsEndImageContext();
         
         // 保存图像
-        UIImageWriteToSavedPhotosAlbum(endImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+        UIImageWriteToSavedPhotosAlbum(resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     }];
 }
 
@@ -180,7 +191,7 @@
     // 预览视图
     UIView *previewView = [UIView new];
     previewView.backgroundColor = [UIColor whiteColor];
-    previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.83);
+    previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.8);
     [self.view addSubview:previewView];
     _previewView = previewView;
     
@@ -227,6 +238,27 @@
 
 }
 /******************************自定义相机的相关方法******************************/
+
+#pragma mark -为照片添加水印图片
+-(void)addWaterMarkPictureAndText{
+    UIImageView *waterPicture = [UIImageView new];
+    waterPicture.image = [UIImage imageNamed:@"water"];
+    waterPicture.contentMode = 0;
+    waterPicture.frame = CGRectMake(0, CGRectGetMaxY(_previewView.frame) - 100, ScreenW, 80);
+    [self.view addSubview:waterPicture];
+    _waterPicture = waterPicture;
+    
+    UILabel *waterLable = [UILabel new];
+    waterLable.text = @"xiao66guo";
+    waterLable.textColor = [UIColor magentaColor];
+    waterLable.font = [UIFont boldSystemFontOfSize:25];
+    [waterLable sizeToFit];
+    CGFloat waterLabW = waterLable.size.width;
+    CGFloat waterLabH = waterLable.size.height;
+    waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 20, waterLabW, waterLabH);
+    [self.view addSubview:waterLable];
+    _waterLable = waterLable;
+}
 
 #pragma mark - 关闭相机界面
 -(void)dissWithCameraVC{
