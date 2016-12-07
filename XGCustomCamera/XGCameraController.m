@@ -8,6 +8,7 @@
 
 #import "XGCameraController.h"
 #import <AVFoundation/AVFoundation.h>
+#define XGSavePictureAnimationDuration 1.5
 @interface XGCameraController ()
 
 @end
@@ -27,6 +28,8 @@
     UIImageView                 *_waterPicture;
     // 水印文字
     UILabel                     *_waterLable;
+    // 保存照片提示文字
+    UILabel                     *_saveTipLable;
 }
 
 - (void)viewDidLoad {
@@ -38,6 +41,9 @@
     
     // 添加水印图片
     [self addWaterMarkPictureAndText];
+    
+    // 添加照片保存后的提示文字
+    [self addSavePictureTipMessage];
     
     // 设置拍摄会话
     [self setupCaptureSession];
@@ -182,8 +188,16 @@
 
 #pragma mark - 保存照片后的回调方法
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
-    NSString *msg = (error == nil) ? @"照片保存成功" : @"照片保存失败";
-    NSLog(@"------%@",msg);
+    NSString *msg = (error == nil) ? @"照片保存成功🎁" : @"照片保存失败💔";
+    _saveTipLable.text = msg;
+    
+    [UIView animateWithDuration:1.0 delay:XGSavePictureAnimationDuration options:0 animations:^{
+        _saveTipLable.alpha = 1.0;
+    } completion:^(BOOL finished) {
+       [UIView animateWithDuration:1.0 animations:^{
+           _saveTipLable.alpha = 0.0;
+       }];
+    }];
 }
 
 #pragma mark - 布局相机底部的按钮
@@ -258,6 +272,21 @@
     waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 20, waterLabW, waterLabH);
     [self.view addSubview:waterLable];
     _waterLable = waterLable;
+}
+
+#pragma mark - 添加照片保存后的提示文字
+-(void)addSavePictureTipMessage{
+    UILabel *tipLab = [UILabel new];
+    tipLab.text = @"照片保存成功🎁";
+    tipLab.textColor = [UIColor whiteColor];
+    tipLab.font = [UIFont boldSystemFontOfSize:16];
+    [tipLab sizeToFit];
+    CGFloat tipLabW = tipLab.size.width;
+    CGFloat tiplabH = tipLab.size.height;
+    tipLab.frame = CGRectMake((ScreenW - tipLabW) * 0.5, 70, tipLabW, tiplabH);
+    tipLab.alpha = 0.0;
+    [self.view addSubview:tipLab];
+    _saveTipLable = tipLab;
 }
 
 #pragma mark - 关闭相机界面
