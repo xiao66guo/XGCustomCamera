@@ -8,7 +8,7 @@
 
 #import "XGCameraController.h"
 #import <AVFoundation/AVFoundation.h>
-#define XGSavePictureAnimationDuration 1.5
+#define XGSavePictureAnimationDuration 1.0
 @interface XGCameraController ()
 
 @end
@@ -30,6 +30,8 @@
     UILabel                     *_waterLable;
     // 保存照片提示文字
     UILabel                     *_saveTipLable;
+    // 拍照按钮
+    UIButton                    *_patPicBtn;
 }
 
 - (void)viewDidLoad {
@@ -62,6 +64,7 @@
 
 #pragma mark - 设置拍摄的会话内容
 -(void)setupCaptureSession{
+    
     // 摄像头的切换
     AVCaptureDevice *device = [self captureChangeDevice];
     
@@ -144,6 +147,9 @@
 
 #pragma mark - 设置拍照按钮的执行方法（拍照和保存）
 -(void)captureWithPicture{
+
+    [self patPicBtnWithAnimation];
+    
     // AVCaptureConnection : 表示图像和摄像头的连接
     AVCaptureConnection *capCon = _imageOutPut.connections.firstObject;
     if (capCon == nil) {
@@ -185,11 +191,31 @@
         UIImageWriteToSavedPhotosAlbum(resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     }];
 }
-
+#pragma mark - 拍照按钮动画方法
+-(void)patPicBtnWithAnimation{
+    // 确认拍照按钮的标题
+    BOOL emptyTitle = (_patPicBtn.currentTitle == nil);
+    NSString *title = emptyTitle ? @"✓" : nil;
+    // 设置按钮的标题
+    [_patPicBtn setTitle:title forState:UIControlStateNormal];
+    
+    // 设置按钮的动画
+    UIViewAnimationOptions  option = UIViewAnimationOptionTransitionFlipFromRight;
+    [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:option animations:nil completion:^(BOOL finished) {
+        // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
+        if (nil == title) {
+            [self startCapture];
+        }
+        
+    }];
+}
 #pragma mark - 保存照片后的回调方法
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *msg = (error == nil) ? @"照片保存成功🎁" : @"照片保存失败💔";
     _saveTipLable.text = msg;
+    
+    // 保存照片时让整个画面处于静止的状态
+    [self stopCapture];
     
     [UIView animateWithDuration:1.0 delay:XGSavePictureAnimationDuration options:0 animations:^{
         _saveTipLable.alpha = 1.0;
@@ -211,7 +237,7 @@
     
     // 拍照按钮
     UIButton *patPic = [UIButton new];
-    [patPic setTitle:@"✓" forState:UIControlStateNormal];
+//    [patPic setTitle:@"✓" forState:UIControlStateNormal];
     patPic.titleLabel.font = [UIFont boldSystemFontOfSize:40];
     UIImage *patPicImage = [UIImage imageNamed:@"camera_pat"];
     [patPic setBackgroundImage:patPicImage forState:UIControlStateNormal];
@@ -219,6 +245,7 @@
     CGFloat patPicH = patPicImage.size.height;
     patPic.frame = CGRectMake((ScreenW - patPicW)* 0.5, ScreenH - patPicH - 20, patPicW, patPicH);
     [self.view addSubview:patPic];
+    _patPicBtn = patPic;
     [patPic addTarget:self action:@selector(captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
