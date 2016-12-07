@@ -32,6 +32,8 @@
     UILabel                     *_saveTipLable;
     // 拍照按钮
     UIButton                    *_patPicBtn;
+    // 分享和尽头旋转按钮
+    UIButton                    *_rotateShare;
 }
 
 - (void)viewDidLoad {
@@ -126,6 +128,13 @@
 #pragma mark - 镜头切换按钮的实现方法
 -(void)switchCapture{
     
+    // 如果当前不是正在拍摄，就执行分享的方法
+    if (!_captureSession.isRunning) {
+        NSLog(@"可以分享了");
+        
+        return;
+    }
+    
     AVCaptureDevice *device = [self captureChangeDevice];
     // 创建输入设备
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
@@ -191,6 +200,7 @@
         UIImageWriteToSavedPhotosAlbum(resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     }];
 }
+
 #pragma mark - 拍照按钮动画方法
 -(void)patPicBtnWithAnimation{
     // 确认拍照按钮的标题
@@ -200,14 +210,20 @@
     [_patPicBtn setTitle:title forState:UIControlStateNormal];
     
     // 设置按钮的动画
-    UIViewAnimationOptions  option = UIViewAnimationOptionTransitionFlipFromRight;
-    [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:option animations:nil completion:^(BOOL finished) {
+    UIViewAnimationOptions  switchOption = emptyTitle ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationTransitionFlipFromLeft;
+    [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:switchOption animations:nil completion:^(BOOL finished) {
         // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
         if (nil == title) {
             [self startCapture];
         }
-        
     }];
+    
+    // 确定分享和旋转按钮的图像
+    NSString *roShareIcon = emptyTitle ? @"pic_share" : @"camera_change";
+    // 设置按钮的图像
+    [_rotateShare setImage:[UIImage imageNamed:roShareIcon] forState:UIControlStateNormal];
+    // 设置切换的动画
+    [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:switchOption animations:nil completion:nil];
 }
 #pragma mark - 保存照片后的回调方法
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
@@ -259,23 +275,24 @@
     [self.view addSubview:closeBtn];
     [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
-    // 镜头旋转按钮
-    UIButton *camChangeBtn = [UIButton new];
-    UIImage *camChangeImage = [UIImage imageNamed:@"camera_change"];
-    CGFloat camChangeW = camChangeImage.size.width;
-    CGFloat camChangeH = camChangeImage.size.height;
-    [camChangeBtn setImage:camChangeImage forState:UIControlStateNormal];
-    camChangeBtn.frame = CGRectMake(ScreenW - 16 - camChangeW, closeBtn.y, camChangeW, camChangeH);
-    [self.view addSubview:camChangeBtn];
-    [camChangeBtn addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
+    // 镜头旋转和分享按钮
+    UIButton *rotateShare = [UIButton new];
+    UIImage *roShareImage = [UIImage imageNamed:@"camera_change"];
+    CGFloat roShareW = roShareImage.size.width;
+    CGFloat roShareH = roShareImage.size.height;
+    [rotateShare setImage:roShareImage forState:UIControlStateNormal];
+    rotateShare.frame = CGRectMake(ScreenW - 16 - roShareW, closeBtn.y, roShareW, roShareH);
+    [self.view addSubview:rotateShare];
+    _rotateShare = rotateShare;
+    [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
     
-    // 分享按钮
-    UIButton *shareBtn = [UIButton new];
-    UIImage *shareImage = [UIImage imageNamed:@"pic_share"];
-    [shareBtn setImage:shareImage forState:UIControlStateNormal];
-    shareBtn.frame = camChangeBtn.frame;
-    shareBtn.hidden = YES;
-    [self.view addSubview:shareBtn];
+//    // 分享按钮
+//    UIButton *shareBtn = [UIButton new];
+//    UIImage *shareImage = [UIImage imageNamed:@"pic_share"];
+//    [shareBtn setImage:shareImage forState:UIControlStateNormal];
+//    shareBtn.frame = camChangeBtn.frame;
+////    shareBtn.hidden = YES;
+//    [self.view addSubview:shareBtn];
 
 }
 /******************************自定义相机的相关方法******************************/
