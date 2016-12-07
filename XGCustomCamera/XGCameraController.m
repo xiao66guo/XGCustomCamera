@@ -18,7 +18,7 @@
     // 输入设备 - 摄像头
     AVCaptureDeviceInput        *_inputDevice;
     // 图像输出
-    AVCapturePhotoOutput   *_imageOutPut;
+    AVCaptureStillImageOutput   *_imageOutPut;
     // 取景视图
     AVCaptureVideoPreviewLayer  *_previewLayer;
     // 预览视图
@@ -35,15 +35,18 @@
     // 设置拍摄会话
     [self setupCaptureSession];
 }
-#pragma mark - 相机的拍摄方法
+
+/******************************自定义相机的相关方法******************************/
 #pragma mark - 开始拍摄
 -(void)startCapture{
     [_captureSession startRunning];
 }
+
 #pragma mark - 停止拍摄
 -(void)stopCapture{
     [_captureSession stopRunning];
 }
+
 #pragma mark - 设置拍摄的会话内容
 -(void)setupCaptureSession{
     // 摄像头的切换
@@ -53,7 +56,7 @@
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
     // 输出图像
-    _imageOutPut = [AVCapturePhotoOutput new];
+    _imageOutPut = [AVCaptureStillImageOutput new];
     // 拍摄会话
     _captureSession = [AVCaptureSession new];
     
@@ -84,6 +87,7 @@
     // 开始拍摄
     [self startCapture];
 }
+
 #pragma mark - 切换摄像头(如果_inputDevice没有值，默认返回后置摄像头）
 -(AVCaptureDevice *)captureChangeDevice{
     // 获得当前输入设备的摄像头的位置
@@ -94,14 +98,15 @@
     NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     //     取出后置摄像头
     AVCaptureDevice *device;
-    for (AVCaptureDevice *obj in deviceArray) {
-        if (obj.position == position) {
-            device = obj;
+    for (AVCaptureDevice *sub in deviceArray) {
+        if (sub.position == position) {
+            device = sub;
             break;
         }
     }
     return device;
 }
+
 #pragma mark - 镜头切换按钮的实现方法
 -(void)switchCapture{
     
@@ -113,6 +118,7 @@
     
     // 删除之前的输入设备(如果要添加输入设备，需要将之前的输入设备删除，否则后面的输入设备将添加不进来)
     [_captureSession removeInput:_inputDevice];
+    
     // 判断设备是否能被切换
     if ([_captureSession canAddInput:input]) {
         _inputDevice = input;
@@ -121,6 +127,52 @@
     [_captureSession addInput:_inputDevice];
     // 重新开启会话
     [self startCapture];
+}
+
+#pragma mark - 设置拍照按钮的执行方法（拍照和保存）
+-(void)captureWithPicture{
+    // AVCaptureConnection : 表示图像和摄像头的连接
+    AVCaptureConnection *capCon = _imageOutPut.connections.firstObject;
+    if (capCon == nil) {
+        NSLog(@"无法连接到摄像头");
+        return;
+    }
+    // 拍摄照片(imageDataSampleBuffer:图像数据采样缓冲区)
+    [_imageOutPut captureStillImageAsynchronouslyFromConnection:capCon completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+        // 判断图像缓冲区是否有数据
+        if (imageDataSampleBuffer == nil) {
+            NSLog(@"图像缓冲区中没有数据");
+            return ;
+        }
+        // 从图像采样缓冲区生成照片的数据
+        NSData *data = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+        
+        // 生成图像
+        UIImage *image = [UIImage imageWithData:data];
+        
+        // 将图像不在预览图层中的内容裁掉
+        // 预览视图的大小
+        CGRect rect = _previewView.bounds;
+        // 重新计算才剪掉的大小
+        CGFloat offset = (self.view.height - rect.size.height) * 0.5;
+        // 通过图像上下文来裁剪图像的真实的大小
+        UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0);
+        // 绘制图像
+        [image drawInRect:CGRectInset(rect, 0, -offset)];
+        // 从图像上下文中获取绘制的结果
+        UIImage *endImage = UIGraphicsGetImageFromCurrentImageContext();
+        // 关闭图像上下文
+        UIGraphicsEndImageContext();
+        
+        // 保存图像
+        UIImageWriteToSavedPhotosAlbum(endImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    }];
+}
+
+#pragma mark - 保存照片后的回调方法
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    NSString *msg = (error == nil) ? @"照片保存成功" : @"照片保存失败";
+    NSLog(@"------%@",msg);
 }
 
 #pragma mark - 布局相机底部的按钮
@@ -142,6 +194,7 @@
     CGFloat patPicH = patPicImage.size.height;
     patPic.frame = CGRectMake((ScreenW - patPicW)* 0.5, ScreenH - patPicH - 20, patPicW, patPicH);
     [self.view addSubview:patPic];
+    [patPic addTarget:self action:@selector(captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
     UIButton *closeBtn = [UIButton new];
@@ -173,6 +226,7 @@
     [self.view addSubview:shareBtn];
 
 }
+/******************************自定义相机的相关方法******************************/
 
 #pragma mark - 关闭相机界面
 -(void)dissWithCameraVC{
