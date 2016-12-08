@@ -8,6 +8,8 @@
 
 #import "XGCameraController.h"
 #import <AVFoundation/AVFoundation.h>
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
 #define XGSavePictureAnimationDuration 1.0
 @interface XGCameraController ()
 
@@ -34,6 +36,8 @@
     UIButton                    *_patPicBtn;
     // 分享和尽头旋转按钮
     UIButton                    *_rotateShare;
+    // 拍照完成的照片
+    UIImage                     *_captureDonePicture;
 }
 
 - (void)viewDidLoad {
@@ -130,8 +134,8 @@
     
     // 如果当前不是正在拍摄，就执行分享的方法
     if (!_captureSession.isRunning) {
-        NSLog(@"可以分享了");
-        
+       
+        [self setupSharePicture];
         return;
     }
     
@@ -152,6 +156,55 @@
     [_captureSession addInput:_inputDevice];
     // 重新开启会话
     [self startCapture];
+}
+
+#pragma mark - 分享照片的方法
+-(void)setupSharePicture{
+    // 如果没有照片就直接返回
+    if (nil == _captureDonePicture) {
+        return;
+    }
+    //1、创建分享图片的数组
+    NSArray *imageArray = @[_captureDonePicture];
+   
+        NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+        [shareParams SSDKSetupShareParamsByText:@"分享内容"
+                                         images:imageArray
+                                            url:[NSURL URLWithString:@"http://mob.com"]
+                                          title:@"分享标题"
+                                           type:SSDKContentTypeAuto];
+    //2、分享（可以弹出我们的分享菜单和编辑界面）
+    [ShareSDK showShareActionSheet:nil
+                             items:nil
+                       shareParams:shareParams
+               onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+                   
+                   switch (state) {
+                       case SSDKResponseStateSuccess:
+                       {
+                           UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                               message:nil
+                                                                              delegate:nil
+                                                                     cancelButtonTitle:@"确定"
+                                                                     otherButtonTitles:nil];
+                           [alertView show];
+                           break;
+                       }
+                       case SSDKResponseStateFail:
+                       {
+                           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                           message:[NSString stringWithFormat:@"%@",error]
+                                                                          delegate:nil
+                                                                 cancelButtonTitle:@"OK"
+                                                                 otherButtonTitles:nil, nil];
+                           [alert show];
+                           break;
+                       }
+                       default:
+                           break;
+                   }
+               }
+     ];
 }
 
 #pragma mark - 设置拍照按钮的执行方法（拍照和保存）
@@ -241,6 +294,8 @@
            _saveTipLable.alpha = 0.0;
        }];
     }];
+    // 记录拍照完成的照片
+    _captureDonePicture = image;
 }
 
 #pragma mark - 布局相机底部的按钮
