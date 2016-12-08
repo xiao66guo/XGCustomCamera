@@ -59,7 +59,7 @@
     [self setupCaptureSession];
 }
 
-/******************************自定义相机的相关方法******************************/
+/******************************自定义相机及相关控件的响应方法******************************/
 #pragma mark - 开始拍摄
 -(void)startCapture{
     [_captureSession startRunning];
@@ -80,9 +80,9 @@
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
     // 输出图像
-    _imageOutPut = [[AVCaptureStillImageOutput alloc] init];
+    _imageOutPut = [AVCaptureStillImageOutput new];
     // 拍摄会话
-    _captureSession = [[AVCaptureSession alloc] init];
+    _captureSession = [AVCaptureSession new];
     
     // 将输入和输出添加到拍摄会话
     if (![_captureSession canAddInput:_inputDevice]) {
@@ -333,17 +333,25 @@
     [self presentViewController:tipView animated:YES completion:nil];
 }
 
+#pragma mark - 改变签名文字的颜色
+-(void)addChangeSignWithFontColor{
+    NSLog(@"改变签名文字的颜色");
+}
+
+/******************************自定义相机及相关控件的响应方法******************************/
+
+/******************************界面中的控件布局******************************/
 #pragma mark - 布局相机底部的按钮
 -(void)layoutCameraBottomWithBtn{
     // 预览视图
-    UIView *previewView = [[UIView alloc] init];
+    UIView *previewView = [UIView new];
     previewView.backgroundColor = [UIColor whiteColor];
     previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.8);
     [self.view addSubview:previewView];
     _previewView = previewView;
     
     // 拍照按钮
-    UIButton *patPic = [[UIButton alloc] init];
+    UIButton *patPic = [UIButton new];
     patPic.titleLabel.font = [UIFont boldSystemFontOfSize:40];
     UIImage *patPicImage = [UIImage imageNamed:@"camera_pat"];
     [patPic setBackgroundImage:patPicImage forState:UIControlStateNormal];
@@ -355,7 +363,7 @@
     [patPic addTarget:self action:@selector(captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
-    UIButton *closeBtn = [[UIButton alloc] init];
+    UIButton *closeBtn = [UIButton new];
     UIImage *closeImage = [UIImage imageNamed:@"camera_close"];
     [closeBtn setImage:closeImage forState:UIControlStateNormal];
     [closeBtn setImage:[UIImage imageNamed:@"camera_close_pressed"] forState:UIControlStateHighlighted];
@@ -367,7 +375,7 @@
     [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
     // 镜头旋转和分享按钮
-    UIButton *rotateShare = [[UIButton alloc] init];
+    UIButton *rotateShare = [UIButton new];
     UIImage *roShareImage = [UIImage imageNamed:@"camera_change"];
     CGFloat roShareW = roShareImage.size.width;
     CGFloat roShareH = roShareImage.size.height;
@@ -378,7 +386,7 @@
     [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
     
     // 签名按钮
-    UIButton *signatureBtn = [[UIButton alloc] init];
+    UIButton *signatureBtn = [UIButton new];
     signatureBtn.backgroundColor = [UIColor whiteColor];
     signatureBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [signatureBtn setTitle:@"签  名" forState:UIControlStateNormal];
@@ -391,19 +399,25 @@
     [self.view addSubview:signatureBtn];
     _signatureBtn = signatureBtn;
     [signatureBtn addTarget:self action:@selector(setupSignature) forControlEvents:UIControlEventTouchUpInside];
+    
+    // 字体颜色
+    UIButton *fontColorBtn = [UIButton new];
+    [fontColorBtn setImage:[UIImage imageNamed:@"fontColor"] forState:UIControlStateNormal];
+    fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-10-roShareW, rotateShare.y, roShareW, roShareH);
+    [self.view addSubview:fontColorBtn];
+    [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor) forControlEvents:UIControlEventTouchUpInside];
 }
-/******************************自定义相机的相关方法******************************/
 
 #pragma mark -为照片添加水印图片
 -(void)addWaterMarkPictureAndText{
-    UIImageView *waterPicture = [[UIImageView alloc] init];
+    UIImageView *waterPicture = [UIImageView new];
     waterPicture.image = [UIImage imageNamed:@"water"];
     waterPicture.contentMode = 0;
     waterPicture.frame = CGRectMake(0, CGRectGetMaxY(_previewView.frame) - 80, ScreenW, 80);
     [self.view addSubview:waterPicture];
     _waterPicture = waterPicture;
     
-    UILabel *waterLable = [[UILabel alloc] init];
+    UILabel *waterLable = [UILabel new];
     waterLable.textAlignment = NSTextAlignmentCenter;
     waterLable.text = @"拍照之前别忘了签名哦😊";
     waterLable.textColor = [UIColor magentaColor];
@@ -412,7 +426,6 @@
     [waterLable sizeToFit];
     CGFloat waterLabW = ScreenW * 0.68;
     CGFloat waterLabH = 50;
-    NSLog(@"%f",waterLabH);
     waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 15, waterLabW, waterLabH);
     [self.view addSubview:waterLable];
     _waterLable = waterLable;
@@ -420,7 +433,7 @@
 
 #pragma mark - 添加照片保存后的提示文字
 -(void)addSavePictureTipMessage{
-    UILabel *tipLab = [[UILabel alloc] init];
+    UILabel *tipLab = [UILabel new];
     tipLab.text = @"照片保存成功🎁";
     tipLab.textColor = [UIColor whiteColor];
     tipLab.font = [UIFont boldSystemFontOfSize:16];
@@ -432,6 +445,7 @@
     [self.view addSubview:tipLab];
     _saveTipLable = tipLab;
 }
+/******************************界面中的控件布局******************************/
 
 #pragma mark - 关闭相机界面
 -(void)dissWithCameraVC{
