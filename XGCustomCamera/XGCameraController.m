@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
-#define XGSavePictureAnimationDuration 1.0
+#define XGSavePictureAnimationDuration 0.8
 @interface XGCameraController ()
 
 @end
@@ -38,6 +38,8 @@
     UIButton                    *_rotateShare;
     // 拍照完成的照片
     UIImage                     *_captureDonePicture;
+    // 签名按钮
+    UIButton                    *_signatureBtn;
 }
 
 - (void)viewDidLoad {
@@ -78,9 +80,9 @@
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
     // 输出图像
-    _imageOutPut = [AVCaptureStillImageOutput new];
+    _imageOutPut = [[AVCaptureStillImageOutput alloc] init];
     // 拍摄会话
-    _captureSession = [AVCaptureSession new];
+    _captureSession = [[AVCaptureSession alloc] init];
     
     // 将输入和输出添加到拍摄会话
     if (![_captureSession canAddInput:_inputDevice]) {
@@ -211,7 +213,6 @@
 -(void)captureWithPicture{
 
     [self patPicBtnWithAnimation];
-    
     // AVCaptureConnection : 表示图像和摄像头的连接
     AVCaptureConnection *capCon = _imageOutPut.connections.firstObject;
     if (capCon == nil) {
@@ -263,7 +264,6 @@
     [_patPicBtn setTitle:title forState:UIControlStateNormal];
     
     // 设置按钮的动画
-//    UIViewAnimationOptions  switchOption = emptyTitle ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationTransitionFlipFromLeft;
     [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
         // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
         if (nil == title) {
@@ -279,6 +279,11 @@
     [_rotateShare setImage:[UIImage imageNamed:pressImage] forState:UIControlStateHighlighted];
     // 设置切换的动画
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
+    
+    // 如果拍照按钮的标题有值，就让签名按钮可用
+    _signatureBtn.enabled = !emptyTitle;
+    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
+    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
 }
 
 #pragma mark - 保存照片后的回调方法
@@ -289,10 +294,10 @@
     // 保存照片时让整个画面处于静止的状态
     [self stopCapture];
     
-    [UIView animateWithDuration:1.0 delay:XGSavePictureAnimationDuration options:0 animations:^{
+    [UIView animateWithDuration:XGSavePictureAnimationDuration delay:XGSavePictureAnimationDuration options:0 animations:^{
         _saveTipLable.alpha = 1.0;
     } completion:^(BOOL finished) {
-       [UIView animateWithDuration:1.0 animations:^{
+       [UIView animateWithDuration:XGSavePictureAnimationDuration animations:^{
            _saveTipLable.alpha = 0.0;
        }];
     }];
@@ -300,17 +305,45 @@
     _captureDonePicture = image;
 }
 
+#pragma mark - 设置签名的方法
+-(void)setupSignature{
+    // 签名弹框
+    UIAlertController *tipView = [UIAlertController alertControllerWithTitle:@"个性签名" message:@"请输入您要签名的内容" preferredStyle:UIAlertControllerStyleAlert];
+    // 向弹框中添加输入框
+    [tipView addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+        textField.placeholder = @"请输入您要签名的内容";
+    }];
+    // 取消操作
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [tipView addAction:cancel];
+    // 确认操作
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        // 取出弹框中的textField
+        UITextField *textContent = [tipView textFields][0];
+        // 取出textField中的内容
+        NSString *sigContent = textContent.text;
+        _waterLable.text = sigContent;
+        _waterLable.textAlignment = _waterLable.text.length >= 18 ? NSTextAlignmentLeft : NSTextAlignmentCenter;
+    }];
+    // 将确认按钮添加到弹框
+    [tipView addAction:sure];
+    
+    // 让弹框显示
+    [self presentViewController:tipView animated:YES completion:nil];
+}
+
 #pragma mark - 布局相机底部的按钮
 -(void)layoutCameraBottomWithBtn{
     // 预览视图
-    UIView *previewView = [UIView new];
+    UIView *previewView = [[UIView alloc] init];
     previewView.backgroundColor = [UIColor whiteColor];
     previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.8);
     [self.view addSubview:previewView];
     _previewView = previewView;
     
     // 拍照按钮
-    UIButton *patPic = [UIButton new];
+    UIButton *patPic = [[UIButton alloc] init];
     patPic.titleLabel.font = [UIFont boldSystemFontOfSize:40];
     UIImage *patPicImage = [UIImage imageNamed:@"camera_pat"];
     [patPic setBackgroundImage:patPicImage forState:UIControlStateNormal];
@@ -322,7 +355,7 @@
     [patPic addTarget:self action:@selector(captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
-    UIButton *closeBtn = [UIButton new];
+    UIButton *closeBtn = [[UIButton alloc] init];
     UIImage *closeImage = [UIImage imageNamed:@"camera_close"];
     [closeBtn setImage:closeImage forState:UIControlStateNormal];
     [closeBtn setImage:[UIImage imageNamed:@"camera_close_pressed"] forState:UIControlStateHighlighted];
@@ -334,7 +367,7 @@
     [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
     // 镜头旋转和分享按钮
-    UIButton *rotateShare = [UIButton new];
+    UIButton *rotateShare = [[UIButton alloc] init];
     UIImage *roShareImage = [UIImage imageNamed:@"camera_change"];
     CGFloat roShareW = roShareImage.size.width;
     CGFloat roShareH = roShareImage.size.height;
@@ -343,34 +376,51 @@
     [self.view addSubview:rotateShare];
     _rotateShare = rotateShare;
     [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
-
+    
+    // 签名按钮
+    UIButton *signatureBtn = [[UIButton alloc] init];
+    signatureBtn.backgroundColor = [UIColor whiteColor];
+    signatureBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [signatureBtn setTitle:@"签  名" forState:UIControlStateNormal];
+    [signatureBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    signatureBtn.frame = CGRectMake(CGRectGetMaxX(closeBtn.frame) + 10, closeBtn.y, 60, closeBtnH);
+    signatureBtn.layer.cornerRadius = 16;
+    signatureBtn.layer.borderWidth = 3;
+    signatureBtn.layer.borderColor = [UIColor greenColor].CGColor;
+    signatureBtn.clipsToBounds = YES;
+    [self.view addSubview:signatureBtn];
+    _signatureBtn = signatureBtn;
+    [signatureBtn addTarget:self action:@selector(setupSignature) forControlEvents:UIControlEventTouchUpInside];
 }
 /******************************自定义相机的相关方法******************************/
 
 #pragma mark -为照片添加水印图片
 -(void)addWaterMarkPictureAndText{
-    UIImageView *waterPicture = [UIImageView new];
+    UIImageView *waterPicture = [[UIImageView alloc] init];
     waterPicture.image = [UIImage imageNamed:@"water"];
     waterPicture.contentMode = 0;
-    waterPicture.frame = CGRectMake(0, CGRectGetMaxY(_previewView.frame) - 100, ScreenW, 80);
+    waterPicture.frame = CGRectMake(0, CGRectGetMaxY(_previewView.frame) - 80, ScreenW, 80);
     [self.view addSubview:waterPicture];
     _waterPicture = waterPicture;
     
-    UILabel *waterLable = [UILabel new];
-    waterLable.text = @"xiao66guo";
+    UILabel *waterLable = [[UILabel alloc] init];
+    waterLable.textAlignment = NSTextAlignmentCenter;
+    waterLable.text = @"拍照之前别忘了签名哦😊";
     waterLable.textColor = [UIColor magentaColor];
-    waterLable.font = [UIFont boldSystemFontOfSize:25];
+    waterLable.numberOfLines = 0;
+    waterLable.font = [UIFont boldSystemFontOfSize:15];
     [waterLable sizeToFit];
-    CGFloat waterLabW = waterLable.size.width;
-    CGFloat waterLabH = waterLable.size.height;
-    waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 20, waterLabW, waterLabH);
+    CGFloat waterLabW = ScreenW * 0.68;
+    CGFloat waterLabH = 50;
+    NSLog(@"%f",waterLabH);
+    waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 15, waterLabW, waterLabH);
     [self.view addSubview:waterLable];
     _waterLable = waterLable;
 }
 
 #pragma mark - 添加照片保存后的提示文字
 -(void)addSavePictureTipMessage{
-    UILabel *tipLab = [UILabel new];
+    UILabel *tipLab = [[UILabel alloc] init];
     tipLab.text = @"照片保存成功🎁";
     tipLab.textColor = [UIColor whiteColor];
     tipLab.font = [UIFont boldSystemFontOfSize:16];
