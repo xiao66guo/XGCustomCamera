@@ -48,9 +48,6 @@
      
           activePlatforms:@[
                             @(SSDKPlatformTypeSinaWeibo),
-                            @(SSDKPlatformTypeMail),
-                            @(SSDKPlatformTypeSMS),
-                            @(SSDKPlatformTypeCopy),
                             @(SSDKPlatformTypeWechat),
                             @(SSDKPlatformTypeQQ),]
                  onImport:^(SSDKPlatformType platformType)
