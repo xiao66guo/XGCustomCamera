@@ -210,8 +210,8 @@
     [_patPicBtn setTitle:title forState:UIControlStateNormal];
     
     // 设置按钮的动画
-    UIViewAnimationOptions  switchOption = emptyTitle ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationTransitionFlipFromLeft;
-    [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:switchOption animations:nil completion:^(BOOL finished) {
+//    UIViewAnimationOptions  switchOption = emptyTitle ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationTransitionFlipFromLeft;
+    [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
         // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
         if (nil == title) {
             [self startCapture];
@@ -223,8 +223,9 @@
     // 设置按钮的图像
     [_rotateShare setImage:[UIImage imageNamed:roShareIcon] forState:UIControlStateNormal];
     // 设置切换的动画
-    [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:switchOption animations:nil completion:nil];
+    [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
 }
+
 #pragma mark - 保存照片后的回调方法
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *msg = (error == nil) ? @"照片保存成功🎁" : @"照片保存失败💔";
@@ -285,14 +286,6 @@
     [self.view addSubview:rotateShare];
     _rotateShare = rotateShare;
     [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
-    
-//    // 分享按钮
-//    UIButton *shareBtn = [UIButton new];
-//    UIImage *shareImage = [UIImage imageNamed:@"pic_share"];
-//    [shareBtn setImage:shareImage forState:UIControlStateNormal];
-//    shareBtn.frame = camChangeBtn.frame;
-////    shareBtn.hidden = YES;
-//    [self.view addSubview:shareBtn];
 
 }
 /******************************自定义相机的相关方法******************************/
