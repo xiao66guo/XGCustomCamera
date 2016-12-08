@@ -275,6 +275,8 @@
     NSString *roShareIcon = emptyTitle ? @"pic_share" : @"camera_change";
     // 设置按钮的图像
     [_rotateShare setImage:[UIImage imageNamed:roShareIcon] forState:UIControlStateNormal];
+    NSString *pressImage = [NSString stringWithFormat:@"%@_pressed",roShareIcon];
+    [_rotateShare setImage:[UIImage imageNamed:pressImage] forState:UIControlStateHighlighted];
     // 设置切换的动画
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
 }
@@ -309,7 +311,6 @@
     
     // 拍照按钮
     UIButton *patPic = [UIButton new];
-//    [patPic setTitle:@"✓" forState:UIControlStateNormal];
     patPic.titleLabel.font = [UIFont boldSystemFontOfSize:40];
     UIImage *patPicImage = [UIImage imageNamed:@"camera_pat"];
     [patPic setBackgroundImage:patPicImage forState:UIControlStateNormal];
@@ -324,6 +325,7 @@
     UIButton *closeBtn = [UIButton new];
     UIImage *closeImage = [UIImage imageNamed:@"camera_close"];
     [closeBtn setImage:closeImage forState:UIControlStateNormal];
+    [closeBtn setImage:[UIImage imageNamed:@"camera_close_pressed"] forState:UIControlStateHighlighted];
     CGFloat closeBtnW = closeImage.size.width;
     CGFloat closeBtnH = closeImage.size.height;
     CGFloat closeDetal = (patPicH - closeBtnH)* 0.5;
