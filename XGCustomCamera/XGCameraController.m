@@ -10,9 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
+#import "XGSwitchColorController.h"
 #define XGSavePictureAnimationDuration 0.8
-@interface XGCameraController ()
-
+@interface XGCameraController ()<UIPopoverPresentationControllerDelegate>
 @end
 
 @implementation XGCameraController{
@@ -334,8 +334,26 @@
 }
 
 #pragma mark - 改变签名文字的颜色
--(void)addChangeSignWithFontColor{
-    NSLog(@"改变签名文字的颜色");
+-(void)addChangeSignWithFontColor:(UIButton *)sender{
+    XGSwitchColorController *pop = [XGSwitchColorController new];
+    pop.bgColor = ^(UIColor *cellColor){
+//        _btn.titleLabel.textColor = cellColor;
+        
+    };
+    pop.modalPresentationStyle = UIModalPresentationPopover;
+    pop.preferredContentSize = CGSizeMake(60, 200);
+    pop.popoverPresentationController.delegate = self;
+    pop.popoverPresentationController.sourceView = sender;
+    pop.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+    
+    CGSize size = sender.bounds.size;
+    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, 0, 0, 0);
+    
+    [self presentViewController:pop animated:YES completion:nil];
+}
+#pragma mark - 不使用系统默认的方式展现
+-(UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
+    return UIModalPresentationNone;
 }
 
 /******************************自定义相机及相关控件的响应方法******************************/
@@ -405,7 +423,7 @@
     [fontColorBtn setImage:[UIImage imageNamed:@"fontColor"] forState:UIControlStateNormal];
     fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-10-roShareW, rotateShare.y, roShareW, roShareH);
     [self.view addSubview:fontColorBtn];
-    [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor) forControlEvents:UIControlEventTouchUpInside];
+    [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark -为照片添加水印图片

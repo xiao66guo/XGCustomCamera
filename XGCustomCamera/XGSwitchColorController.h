@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XGSwitchColorController : UIViewController
-
+@property (nonatomic, copy) void (^bgColor)(UIColor *fontColor);
 @end
