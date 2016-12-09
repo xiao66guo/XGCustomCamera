@@ -258,12 +258,15 @@
         // 绘制水印图像
         [_waterPicture.image drawInRect:_waterPicture.frame];
         // 绘制水印文字
-        NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
-        if (openColor || openSize) {
+        if (textSize != 0 || _popSwitchFontColor != nil) {
+            NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
             NSRange range = NSMakeRange(0, waterText.length);
             [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:textSize],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+            [waterText drawInRect:_waterLable.frame];
+        }else{
+            [_waterLable.attributedText drawInRect:_waterLable.frame];
         }
-        [waterText drawInRect:_waterLable.frame];
+        
         // 从图像上下文中获取绘制的结果
         UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
         // 关闭图像上下文
@@ -358,42 +361,38 @@
 #pragma mark - 改变签名文字的颜色
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
     openColor = !sender.isSelected;
-    XGSwitchColorController *pop = [XGSwitchColorController new];
-    pop.bgColor = ^(UIColor *cellColor){
+    XGSwitchColorController *switchColor = [XGSwitchColorController new];
+    switchColor.bgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
         _popSwitchFontColor = cellColor;
     };
-    pop.modalPresentationStyle = UIModalPresentationPopover;
-    pop.preferredContentSize = CGSizeMake(60, 200);
-    pop.popoverPresentationController.delegate = self;
-    pop.popoverPresentationController.sourceView = sender;
-    pop.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
-    
-    CGSize size = sender.bounds.size;
-    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
-    
-    [self presentViewController:pop animated:YES completion:nil];
+    [self setupPopViewWithAttribute:switchColor andView:sender];
 }
 
 #pragma mark - 改变签名字体的大小
 -(void)changeSignatureWithFontSize:(UIButton *)sender{
+    NSLog(@"%zd",sender.isSelected);
     openSize = !sender.isSelected;
-    XGSwitchFontSizeController *pop = [XGSwitchFontSizeController new];
-    pop.fontSize = ^(NSInteger fontSize){
+    XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
+    switchSize.fontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
         textSize = fontSize;
     };
-    pop.modalPresentationStyle = UIModalPresentationPopover;
-    pop.preferredContentSize = CGSizeMake(60, 200);
-    pop.popoverPresentationController.delegate = self;
-    pop.popoverPresentationController.sourceView = sender;
-    pop.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
-    
-    CGSize size = sender.bounds.size;
-    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
-    
-    [self presentViewController:pop animated:YES completion:nil];
+    [self setupPopViewWithAttribute:switchSize andView:sender];
+}
 
+#pragma mark - pop展现视图的公共方法
+-(void)setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
+    vc.modalPresentationStyle = UIModalPresentationPopover;
+    vc.preferredContentSize = CGSizeMake(60, 200);
+    vc.popoverPresentationController.delegate = self;
+    vc.popoverPresentationController.sourceView = view;
+    vc.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+    
+    CGSize size = view.bounds.size;
+    vc.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
+    
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - 不使用系统默认的方式展现
@@ -491,7 +490,7 @@
     
     UILabel *waterLable = [UILabel new];
     waterLable.textAlignment = NSTextAlignmentCenter;
-    waterLable.text = @"拍照之前别忘了签名哦,可以增加拍出的照片更有活力哦😊";
+    waterLable.text = @"拍照之前别忘了签名哦😊";
     waterLable.textColor = [UIColor magentaColor];
     waterLable.numberOfLines = 0;
     waterLable.font = [UIFont systemFontOfSize:15];
