@@ -40,6 +40,9 @@
     UIImage                     *_captureDonePicture;
     // 签名按钮
     UIButton                    *_signatureBtn;
+    // 字体颜色选择按钮
+    UIButton                    *_fontColorBtn;
+    UIColor                     *_popSwitchFontColor;
 }
 
 - (void)viewDidLoad {
@@ -244,7 +247,10 @@
         // 绘制水印图像
         [_waterPicture.image drawInRect:_waterPicture.frame];
         // 绘制水印文字
-        [_waterLable.attributedText drawInRect:_waterLable.frame];
+        NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
+        NSRange range = NSMakeRange(0, waterText.length);
+        [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:15],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+        [waterText drawInRect:_waterLable.frame];
         // 从图像上下文中获取绘制的结果
         UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
         // 关闭图像上下文
@@ -253,6 +259,7 @@
         // 保存图像
         UIImageWriteToSavedPhotosAlbum(resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     }];
+
 }
 
 #pragma mark - 拍照按钮动画方法
@@ -280,10 +287,11 @@
     // 设置切换的动画
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     
-    // 如果拍照按钮的标题有值，就让签名按钮可用
-    _signatureBtn.enabled = !emptyTitle;
-    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
-    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
+//    // 如果拍照按钮的标题没有值时，就让签名按钮和字体颜色选择按钮可用
+//    _signatureBtn.enabled = !emptyTitle;
+//    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
+//    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
+//    _fontColorBtn.enabled = !emptyTitle;
 }
 
 #pragma mark - 保存照片后的回调方法
@@ -294,7 +302,7 @@
     // 保存照片时让整个画面处于静止的状态
     [self stopCapture];
     
-    [UIView animateWithDuration:XGSavePictureAnimationDuration delay:XGSavePictureAnimationDuration options:0 animations:^{
+    [UIView animateWithDuration:XGSavePictureAnimationDuration delay:0.5 options:0 animations:^{
         _saveTipLable.alpha = 1.0;
     } completion:^(BOOL finished) {
        [UIView animateWithDuration:XGSavePictureAnimationDuration animations:^{
@@ -324,7 +332,7 @@
         // 取出textField中的内容
         NSString *sigContent = textContent.text;
         _waterLable.text = sigContent;
-        _waterLable.textAlignment = _waterLable.text.length >= 18 ? NSTextAlignmentLeft : NSTextAlignmentCenter;
+        _waterLable.textAlignment = _waterLable.text.length >= 20 ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     }];
     // 将确认按钮添加到弹框
     [tipView addAction:sure];
@@ -337,8 +345,8 @@
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
     XGSwitchColorController *pop = [XGSwitchColorController new];
     pop.bgColor = ^(UIColor *cellColor){
-//        _btn.titleLabel.textColor = cellColor;
-        
+        _waterLable.textColor = cellColor;
+        _popSwitchFontColor = cellColor;
     };
     pop.modalPresentationStyle = UIModalPresentationPopover;
     pop.preferredContentSize = CGSizeMake(60, 200);
@@ -424,6 +432,7 @@
     fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-10-roShareW, rotateShare.y, roShareW, roShareH);
     [self.view addSubview:fontColorBtn];
     [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor:) forControlEvents:UIControlEventTouchUpInside];
+    _fontColorBtn = fontColorBtn;
 }
 
 #pragma mark -为照片添加水印图片
@@ -436,15 +445,16 @@
     _waterPicture = waterPicture;
     
     UILabel *waterLable = [UILabel new];
+    waterLable.backgroundColor = [UIColor redColor];
     waterLable.textAlignment = NSTextAlignmentCenter;
-    waterLable.text = @"拍照之前别忘了签名哦😊";
+    waterLable.text = @"拍照之前别忘了签名哦,可以增加拍出的照片更有活力哦😊";
     waterLable.textColor = [UIColor magentaColor];
     waterLable.numberOfLines = 0;
     waterLable.font = [UIFont boldSystemFontOfSize:15];
     [waterLable sizeToFit];
     CGFloat waterLabW = ScreenW * 0.68;
-    CGFloat waterLabH = 50;
-    waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 15, waterLabW, waterLabH);
+    CGFloat waterLabH = 60;
+    waterLable.frame = CGRectMake((ScreenW - waterLabW) *0.5, waterPicture.y + 12, waterLabW, waterLabH);
     [self.view addSubview:waterLable];
     _waterLable = waterLable;
 }
