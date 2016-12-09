@@ -13,7 +13,7 @@
 #import "XGSwitchColorController.h"
 #import "XGSwitchFontSizeController.h"
 #define XGSavePictureAnimationDuration 0.8
-#define XGCameraSubViewMargin 10
+#define XGCameraSubViewMargin 8
 @interface XGCameraController ()<UIPopoverPresentationControllerDelegate>
 @end
 
@@ -48,8 +48,12 @@
     UIButton                    *_fontSizeBtn;
     // 记录颜色选择
     UIColor                     *_popSwitchFontColor;
+    // 记录字体选择的大小
+    NSInteger                   textSize;
     // 字体颜色按钮的选择状态
     BOOL                        openColor;
+    // 字体大小按钮的选择状态
+    BOOL                        openSize;
 }
 
 - (void)viewDidLoad {
@@ -255,9 +259,9 @@
         [_waterPicture.image drawInRect:_waterPicture.frame];
         // 绘制水印文字
         NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
-        if (openColor) {
+        if (openColor || openSize) {
             NSRange range = NSMakeRange(0, waterText.length);
-            [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:15],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+            [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:textSize],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
         }
         [waterText drawInRect:_waterLable.frame];
         // 从图像上下文中获取绘制的结果
@@ -301,6 +305,7 @@
     _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
     _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
     _fontColorBtn.enabled = !emptyTitle;
+    _fontSizeBtn.enabled = !emptyTitle;
 }
 
 #pragma mark - 保存照片后的回调方法
@@ -372,9 +377,11 @@
 
 #pragma mark - 改变签名字体的大小
 -(void)changeSignatureWithFontSize:(UIButton *)sender{
+    openSize = !sender.isSelected;
     XGSwitchFontSizeController *pop = [XGSwitchFontSizeController new];
     pop.fontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
+        textSize = fontSize;
     };
     pop.modalPresentationStyle = UIModalPresentationPopover;
     pop.preferredContentSize = CGSizeMake(60, 200);
@@ -487,7 +494,7 @@
     waterLable.text = @"拍照之前别忘了签名哦,可以增加拍出的照片更有活力哦😊";
     waterLable.textColor = [UIColor magentaColor];
     waterLable.numberOfLines = 0;
-    waterLable.font = [UIFont boldSystemFontOfSize:15];
+    waterLable.font = [UIFont systemFontOfSize:15];
     [waterLable sizeToFit];
     CGFloat waterLabW = ScreenW * 0.68;
     CGFloat waterLabH = 60;
