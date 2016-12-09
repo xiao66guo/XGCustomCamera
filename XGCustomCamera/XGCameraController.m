@@ -43,6 +43,7 @@
     // 字体颜色选择按钮
     UIButton                    *_fontColorBtn;
     UIColor                     *_popSwitchFontColor;
+    BOOL                        open;
 }
 
 - (void)viewDidLoad {
@@ -248,8 +249,10 @@
         [_waterPicture.image drawInRect:_waterPicture.frame];
         // 绘制水印文字
         NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
-        NSRange range = NSMakeRange(0, waterText.length);
-        [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:15],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+        if (open) {
+            NSRange range = NSMakeRange(0, waterText.length);
+            [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:15],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+        }
         [waterText drawInRect:_waterLable.frame];
         // 从图像上下文中获取绘制的结果
         UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -287,11 +290,11 @@
     // 设置切换的动画
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     
-//    // 如果拍照按钮的标题没有值时，就让签名按钮和字体颜色选择按钮可用
-//    _signatureBtn.enabled = !emptyTitle;
-//    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
-//    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
-//    _fontColorBtn.enabled = !emptyTitle;
+    // 如果拍照按钮的标题没有值时，就让签名按钮和字体颜色选择按钮可用
+    _signatureBtn.enabled = !emptyTitle;
+    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
+    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
+    _fontColorBtn.enabled = !emptyTitle;
 }
 
 #pragma mark - 保存照片后的回调方法
@@ -332,7 +335,7 @@
         // 取出textField中的内容
         NSString *sigContent = textContent.text;
         _waterLable.text = sigContent;
-        _waterLable.textAlignment = _waterLable.text.length >= 20 ? NSTextAlignmentCenter : NSTextAlignmentLeft;
+        _waterLable.textAlignment = _waterLable.text.length >= 20 ? NSTextAlignmentLeft : NSTextAlignmentCenter;
     }];
     // 将确认按钮添加到弹框
     [tipView addAction:sure];
@@ -343,6 +346,7 @@
 
 #pragma mark - 改变签名文字的颜色
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
+    open = !sender.isSelected;
     XGSwitchColorController *pop = [XGSwitchColorController new];
     pop.bgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
@@ -445,7 +449,6 @@
     _waterPicture = waterPicture;
     
     UILabel *waterLable = [UILabel new];
-    waterLable.backgroundColor = [UIColor redColor];
     waterLable.textAlignment = NSTextAlignmentCenter;
     waterLable.text = @"拍照之前别忘了签名哦,可以增加拍出的照片更有活力哦😊";
     waterLable.textColor = [UIColor magentaColor];
