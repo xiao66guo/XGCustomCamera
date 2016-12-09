@@ -11,7 +11,9 @@
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "XGSwitchColorController.h"
+#import "XGSwitchFontSizeController.h"
 #define XGSavePictureAnimationDuration 0.8
+#define XGCameraSubViewMargin 10
 @interface XGCameraController ()<UIPopoverPresentationControllerDelegate>
 @end
 
@@ -42,8 +44,12 @@
     UIButton                    *_signatureBtn;
     // 字体颜色选择按钮
     UIButton                    *_fontColorBtn;
+    // 字体大小选择按钮
+    UIButton                    *_fontSizeBtn;
+    // 记录颜色选择
     UIColor                     *_popSwitchFontColor;
-    BOOL                        open;
+    // 字体颜色按钮的选择状态
+    BOOL                        openColor;
 }
 
 - (void)viewDidLoad {
@@ -249,7 +255,7 @@
         [_waterPicture.image drawInRect:_waterPicture.frame];
         // 绘制水印文字
         NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
-        if (open) {
+        if (openColor) {
             NSRange range = NSMakeRange(0, waterText.length);
             [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:15],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
         }
@@ -346,7 +352,7 @@
 
 #pragma mark - 改变签名文字的颜色
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
-    open = !sender.isSelected;
+    openColor = !sender.isSelected;
     XGSwitchColorController *pop = [XGSwitchColorController new];
     pop.bgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
@@ -359,10 +365,30 @@
     pop.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
     
     CGSize size = sender.bounds.size;
-    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, 0, 0, 0);
+    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
     
     [self presentViewController:pop animated:YES completion:nil];
 }
+
+#pragma mark - 改变签名字体的大小
+-(void)changeSignatureWithFontSize:(UIButton *)sender{
+    XGSwitchFontSizeController *pop = [XGSwitchFontSizeController new];
+    pop.fontSize = ^(NSInteger fontSize){
+        _waterLable.font = [UIFont systemFontOfSize:fontSize];
+    };
+    pop.modalPresentationStyle = UIModalPresentationPopover;
+    pop.preferredContentSize = CGSizeMake(60, 200);
+    pop.popoverPresentationController.delegate = self;
+    pop.popoverPresentationController.sourceView = sender;
+    pop.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+    
+    CGSize size = sender.bounds.size;
+    pop.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
+    
+    [self presentViewController:pop animated:YES completion:nil];
+
+}
+
 #pragma mark - 不使用系统默认的方式展现
 -(UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
     return UIModalPresentationNone;
@@ -400,7 +426,7 @@
     CGFloat closeBtnW = closeImage.size.width;
     CGFloat closeBtnH = closeImage.size.height;
     CGFloat closeDetal = (patPicH - closeBtnH)* 0.5;
-    closeBtn.frame = CGRectMake(16, patPic.y + closeDetal, closeBtnW, closeBtnH);
+    closeBtn.frame = CGRectMake(XGCameraSubViewMargin, patPic.y + closeDetal, closeBtnW, closeBtnH);
     [self.view addSubview:closeBtn];
     [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
@@ -410,7 +436,7 @@
     CGFloat roShareW = roShareImage.size.width;
     CGFloat roShareH = roShareImage.size.height;
     [rotateShare setImage:roShareImage forState:UIControlStateNormal];
-    rotateShare.frame = CGRectMake(ScreenW - 16 - roShareW, closeBtn.y, roShareW, roShareH);
+    rotateShare.frame = CGRectMake(ScreenW - XGCameraSubViewMargin - roShareW, closeBtn.y, roShareW, roShareH);
     [self.view addSubview:rotateShare];
     _rotateShare = rotateShare;
     [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
@@ -421,7 +447,7 @@
     signatureBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [signatureBtn setTitle:@"签  名" forState:UIControlStateNormal];
     [signatureBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    signatureBtn.frame = CGRectMake(CGRectGetMaxX(closeBtn.frame) + 10, closeBtn.y, 60, closeBtnH);
+    signatureBtn.frame = CGRectMake(CGRectGetMaxX(closeBtn.frame) + XGCameraSubViewMargin, closeBtn.y, 60, closeBtnH);
     signatureBtn.layer.cornerRadius = 16;
     signatureBtn.layer.borderWidth = 3;
     signatureBtn.layer.borderColor = [UIColor greenColor].CGColor;
@@ -433,10 +459,18 @@
     // 字体颜色
     UIButton *fontColorBtn = [UIButton new];
     [fontColorBtn setImage:[UIImage imageNamed:@"fontColor"] forState:UIControlStateNormal];
-    fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-10-roShareW, rotateShare.y, roShareW, roShareH);
+    fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-XGCameraSubViewMargin-roShareW, rotateShare.y, roShareW, roShareH);
     [self.view addSubview:fontColorBtn];
     [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor:) forControlEvents:UIControlEventTouchUpInside];
     _fontColorBtn = fontColorBtn;
+    
+    // 字体大小
+    UIButton *fontSizeBtn = [UIButton new];
+    [fontSizeBtn setImage:[UIImage imageNamed:@"fontSize"] forState:UIControlStateNormal];
+    fontSizeBtn.frame = CGRectMake(CGRectGetMinX(fontColorBtn.frame) - XGCameraSubViewMargin - fontColorBtn.width, fontColorBtn.y, fontColorBtn.width, fontColorBtn.height);
+    [self.view addSubview:fontSizeBtn];
+    [fontSizeBtn addTarget:self action:@selector(changeSignatureWithFontSize:) forControlEvents:UIControlEventTouchUpInside];
+    _fontSizeBtn = fontSizeBtn;
 }
 
 #pragma mark -为照片添加水印图片

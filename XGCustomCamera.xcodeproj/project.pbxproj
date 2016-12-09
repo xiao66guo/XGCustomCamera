@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		994C101D53F911062A6FA879 /* libPods-XGCustomCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA53B2EDEA50C42C1AE8EA74 /* libPods-XGCustomCamera.a */; };
+		DB43B4E11DFAA10200FA6C35 /* XGSwitchFontSizeController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB43B4E01DFAA10200FA6C35 /* XGSwitchFontSizeController.m */; };
 		DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C679E1DF6DEFD009FEA92 /* main.m */; };
 		DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67A11DF6DEFD009FEA92 /* AppDelegate.m */; };
 		DB5C67AA1DF6DEFD009FEA92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */; };
@@ -23,6 +24,8 @@
 		901C5E43D90E80C59A8189EB /* Pods-XGCustomCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XGCustomCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-XGCustomCamera/Pods-XGCustomCamera.debug.xcconfig"; sourceTree = "<group>"; };
 		939635AE1641842BD3017BB6 /* Pods-XGCustomCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XGCustomCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-XGCustomCamera/Pods-XGCustomCamera.release.xcconfig"; sourceTree = "<group>"; };
 		DA53B2EDEA50C42C1AE8EA74 /* libPods-XGCustomCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XGCustomCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB43B4DF1DFAA10200FA6C35 /* XGSwitchFontSizeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSwitchFontSizeController.h; sourceTree = "<group>"; };
+		DB43B4E01DFAA10200FA6C35 /* XGSwitchFontSizeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGSwitchFontSizeController.m; sourceTree = "<group>"; };
 		DB5C679A1DF6DEFD009FEA92 /* XGCustomCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XGCustomCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5C679E1DF6DEFD009FEA92 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DB5C67A01DF6DEFD009FEA92 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				DB5C67B81DF6F47D009FEA92 /* XGCameraController.m */,
 				DB8E39241DF992E8009531DC /* XGSwitchColorController.h */,
 				DB8E39251DF992E8009531DC /* XGSwitchColorController.m */,
+				DB43B4DF1DFAA10200FA6C35 /* XGSwitchFontSizeController.h */,
+				DB43B4E01DFAA10200FA6C35 /* XGSwitchFontSizeController.m */,
 				DB5C67A91DF6DEFD009FEA92 /* Assets.xcassets */,
 				DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */,
 				DB5C67AE1DF6DEFD009FEA92 /* Info.plist */,
@@ -259,6 +264,7 @@
 				DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */,
 				DB5C679F1DF6DEFD009FEA92 /* main.m in Sources */,
 				DB8E39261DF992E8009531DC /* XGSwitchColorController.m in Sources */,
+				DB43B4E11DFAA10200FA6C35 /* XGSwitchFontSizeController.m in Sources */,
 				DB5C67B91DF6F47D009FEA92 /* XGCameraController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
