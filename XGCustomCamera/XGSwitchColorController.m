@@ -42,7 +42,7 @@ static NSString *ID = @"cell";
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         for (UIView *bgV in cell.contentView.subviews) {
             if ([bgV isKindOfClass:[UILabel class]]) {
-                _bgColor(bgV.backgroundColor);
+                _xg_BgColor(bgV.backgroundColor);
             }
         }
     }];

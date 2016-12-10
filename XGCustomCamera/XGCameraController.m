@@ -57,34 +57,34 @@
     self.view.backgroundColor = [UIColor blackColor];
     
     // 布局相机底部的按钮
-    [self layoutCameraBottomWithBtn];
+    [self xg_layoutCameraBottomWithBtn];
     
     // 添加水印图片
-    [self addWaterMarkPictureAndText];
+    [self xg_addWaterMarkPictureAndText];
     
     // 添加照片保存后的提示文字
-    [self addSavePictureTipMessage];
+    [self xg_addSavePictureTipMessage];
     
     // 设置拍摄会话
-    [self setupCaptureSession];
+    [self xg_setupCaptureSession];
 }
 
 /******************************自定义相机及相关控件的响应方法******************************/
 #pragma mark - 开始拍摄
--(void)startCapture{
+-(void)xg_startCapture{
     [_captureSession startRunning];
 }
 
 #pragma mark - 停止拍摄
--(void)stopCapture{
+-(void)xg_stopCapture{
     [_captureSession stopRunning];
 }
 
 #pragma mark - 设置拍摄的会话内容
--(void)setupCaptureSession{
+-(void)xg_setupCaptureSession{
     
     // 摄像头的切换
-    AVCaptureDevice *device = [self captureChangeDevice];
+    AVCaptureDevice *device = [self xg_captureChangeDevice];
     
     // 输入设备
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
@@ -119,11 +119,11 @@
     _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
     // 开始拍摄
-    [self startCapture];
+    [self xg_startCapture];
 }
 
 #pragma mark - 切换摄像头(如果_inputDevice没有值，默认返回后置摄像头）
--(AVCaptureDevice *)captureChangeDevice{
+-(AVCaptureDevice *)xg_captureChangeDevice{
     // 获得当前输入设备的摄像头的位置
     AVCaptureDevicePosition position = _inputDevice.device.position;
     
@@ -142,20 +142,20 @@
 }
 
 #pragma mark - 镜头切换按钮的实现方法
--(void)switchCapture{
+-(void)xg_switchCapture{
     
     // 如果当前不是正在拍摄，就执行分享的方法
     if (!_captureSession.isRunning) {
        
-        [self setupSharePicture];
+        [self xg_setupSharePicture];
         return;
     }
     
-    AVCaptureDevice *device = [self captureChangeDevice];
+    AVCaptureDevice *device = [self xg_captureChangeDevice];
     // 创建输入设备
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     // 停止之前的输入设备
-    [self stopCapture];
+    [self xg_stopCapture];
     
     // 删除之前的输入设备(如果要添加输入设备，需要将之前的输入设备删除，否则后面的输入设备将添加不进来)
     [_captureSession removeInput:_inputDevice];
@@ -167,11 +167,11 @@
     // 添加到会话
     [_captureSession addInput:_inputDevice];
     // 重新开启会话
-    [self startCapture];
+    [self xg_startCapture];
 }
 
 #pragma mark - 分享照片的方法
--(void)setupSharePicture{
+-(void)xg_setupSharePicture{
     // 如果没有照片就直接返回
     if (nil == _captureDonePicture) {
         return;
@@ -220,9 +220,9 @@
 }
 
 #pragma mark - 设置拍照按钮的执行方法（拍照和保存）
--(void)captureWithPicture{
+-(void)xg_captureWithPicture{
 
-    [self patPicBtnWithAnimation];
+    [self xg_patPicBtnWithAnimation];
     // AVCaptureConnection : 表示图像和摄像头的连接
     AVCaptureConnection *capCon = _imageOutPut.connections.firstObject;
     if (capCon == nil) {
@@ -280,7 +280,7 @@
 }
 
 #pragma mark - 拍照按钮动画方法
--(void)patPicBtnWithAnimation{
+-(void)xg_patPicBtnWithAnimation{
     // 确认拍照按钮的标题
     BOOL emptyTitle = (_patPicBtn.currentTitle == nil);
     NSString *title = emptyTitle ? @"✓" : nil;
@@ -291,7 +291,7 @@
     [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
         // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
         if (nil == title) {
-            [self startCapture];
+            [self xg_startCapture];
         }
     }];
     
@@ -318,7 +318,7 @@
     _saveTipLable.text = msg;
     
     // 保存照片时让整个画面处于静止的状态
-    [self stopCapture];
+    [self xg_stopCapture];
     
     [UIView animateWithDuration:XGSavePictureAnimationDuration delay:0.5 options:0 animations:^{
         _saveTipLable.alpha = 1.0;
@@ -332,7 +332,7 @@
 }
 
 #pragma mark - 设置签名的方法
--(void)setupSignature{
+-(void)xg_setupSignature{
     // 签名弹框
     UIAlertController *tipView = [UIAlertController alertControllerWithTitle:@"个性签名" message:@"请输入您要签名的内容" preferredStyle:UIAlertControllerStyleAlert];
     // 向弹框中添加输入框
@@ -360,27 +360,27 @@
 }
 
 #pragma mark - 改变签名文字的颜色
--(void)addChangeSignWithFontColor:(UIButton *)sender{
+-(void)xg_addChangeSignWithFontColor:(UIButton *)sender{
     XGSwitchColorController *switchColor = [XGSwitchColorController new];
-    switchColor.bgColor = ^(UIColor *cellColor){
+    switchColor.xg_BgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
         _popSwitchFontColor = cellColor;
     };
-    [self setupPopViewWithAttribute:switchColor andView:sender];
+    [self xg_setupPopViewWithAttribute:switchColor andView:sender];
 }
 
 #pragma mark - 改变签名字体的大小
--(void)changeSignatureWithFontSize:(UIButton *)sender{
+-(void)xg_changeSignatureWithFontSize:(UIButton *)sender{
     XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
-    switchSize.fontSize = ^(NSInteger fontSize){
+    switchSize.xg_FontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
         textSize = fontSize;
     };
-    [self setupPopViewWithAttribute:switchSize andView:sender];
+    [self xg_setupPopViewWithAttribute:switchSize andView:sender];
 }
 
 #pragma mark - pop展现视图的公共方法
--(void)setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
+-(void)xg_setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
     vc.modalPresentationStyle = UIModalPresentationPopover;
     vc.preferredContentSize = CGSizeMake(60, 200);
     vc.popoverPresentationController.delegate = self;
@@ -402,7 +402,7 @@
 
 /******************************界面中的控件布局******************************/
 #pragma mark - 布局相机底部的按钮
--(void)layoutCameraBottomWithBtn{
+-(void)xg_layoutCameraBottomWithBtn{
     // 预览视图
     UIView *previewView = [UIView new];
     previewView.backgroundColor = [UIColor whiteColor];
@@ -420,7 +420,7 @@
     patPic.frame = CGRectMake((ScreenW - patPicW)* 0.5, ScreenH - patPicH - 20, patPicW, patPicH);
     [self.view addSubview:patPic];
     _patPicBtn = patPic;
-    [patPic addTarget:self action:@selector(captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
+    [patPic addTarget:self action:@selector(xg_captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
     UIButton *closeBtn = [UIButton new];
@@ -432,7 +432,7 @@
     CGFloat closeDetal = (patPicH - closeBtnH)* 0.5;
     closeBtn.frame = CGRectMake(XGCameraSubViewMargin, patPic.y + closeDetal, closeBtnW, closeBtnH);
     [self.view addSubview:closeBtn];
-    [closeBtn addTarget:self action:@selector(dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
+    [closeBtn addTarget:self action:@selector(xg_dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
     // 镜头旋转和分享按钮
     UIButton *rotateShare = [UIButton new];
@@ -443,7 +443,7 @@
     rotateShare.frame = CGRectMake(ScreenW - XGCameraSubViewMargin - roShareW, closeBtn.y, roShareW, roShareH);
     [self.view addSubview:rotateShare];
     _rotateShare = rotateShare;
-    [rotateShare addTarget:self action:@selector(switchCapture) forControlEvents:UIControlEventTouchUpInside];
+    [rotateShare addTarget:self action:@selector(xg_switchCapture) forControlEvents:UIControlEventTouchUpInside];
     
     // 签名按钮
     UIButton *signatureBtn = [UIButton new];
@@ -458,14 +458,14 @@
     signatureBtn.clipsToBounds = YES;
     [self.view addSubview:signatureBtn];
     _signatureBtn = signatureBtn;
-    [signatureBtn addTarget:self action:@selector(setupSignature) forControlEvents:UIControlEventTouchUpInside];
+    [signatureBtn addTarget:self action:@selector(xg_setupSignature) forControlEvents:UIControlEventTouchUpInside];
     
     // 字体颜色
     UIButton *fontColorBtn = [UIButton new];
     [fontColorBtn setImage:[UIImage imageNamed:@"fontColor"] forState:UIControlStateNormal];
     fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-XGCameraSubViewMargin-roShareW, rotateShare.y, roShareW, roShareH);
     [self.view addSubview:fontColorBtn];
-    [fontColorBtn addTarget:self action:@selector(addChangeSignWithFontColor:) forControlEvents:UIControlEventTouchUpInside];
+    [fontColorBtn addTarget:self action:@selector(xg_addChangeSignWithFontColor:) forControlEvents:UIControlEventTouchUpInside];
     _fontColorBtn = fontColorBtn;
     
     // 字体大小
@@ -473,12 +473,12 @@
     [fontSizeBtn setImage:[UIImage imageNamed:@"fontSize"] forState:UIControlStateNormal];
     fontSizeBtn.frame = CGRectMake(CGRectGetMinX(fontColorBtn.frame) - XGCameraSubViewMargin - fontColorBtn.width, fontColorBtn.y, fontColorBtn.width, fontColorBtn.height);
     [self.view addSubview:fontSizeBtn];
-    [fontSizeBtn addTarget:self action:@selector(changeSignatureWithFontSize:) forControlEvents:UIControlEventTouchUpInside];
+    [fontSizeBtn addTarget:self action:@selector(xg_changeSignatureWithFontSize:) forControlEvents:UIControlEventTouchUpInside];
     _fontSizeBtn = fontSizeBtn;
 }
 
 #pragma mark -为照片添加水印图片
--(void)addWaterMarkPictureAndText{
+-(void)xg_addWaterMarkPictureAndText{
     UIImageView *waterPicture = [UIImageView new];
     waterPicture.image = [UIImage imageNamed:@"water"];
     waterPicture.contentMode = 0;
@@ -501,7 +501,7 @@
 }
 
 #pragma mark - 添加照片保存后的提示文字
--(void)addSavePictureTipMessage{
+-(void)xg_addSavePictureTipMessage{
     UILabel *tipLab = [UILabel new];
     tipLab.text = @"照片保存成功🎁";
     tipLab.textColor = [UIColor whiteColor];
@@ -517,7 +517,7 @@
 /******************************界面中的控件布局******************************/
 
 #pragma mark - 关闭相机界面
--(void)dissWithCameraVC{
+-(void)xg_dissWithCameraVC{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

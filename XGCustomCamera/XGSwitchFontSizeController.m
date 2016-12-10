@@ -45,7 +45,7 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         for (UILabel *bgV in cell.contentView.subviews) {
             if ([bgV isKindOfClass:[UILabel class]]) {
-                _fontSize([bgV.text integerValue]);
+                _xg_FontSize([bgV.text integerValue]);
             }
         }
     }];

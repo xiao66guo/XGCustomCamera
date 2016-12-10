@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XGSwitchFontSizeController : UIViewController
-@property (nonatomic, copy) void (^fontSize)(NSInteger fontSize);
+@property (nonatomic, copy) void (^xg_FontSize)(NSInteger fontSize);
 @end
