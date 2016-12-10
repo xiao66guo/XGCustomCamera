@@ -24,12 +24,10 @@
 
 #pragma mark - 添加打开相机按钮
 -(void)setupOpenCameraBtn{
-    _openCameraBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 50)];
-    _openCameraBtn.backgroundColor = [UIColor blueColor];
-    _openCameraBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    _openCameraBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 150)];
     _openCameraBtn.center = self.view.center;
     [self.view addSubview:_openCameraBtn];
-    [_openCameraBtn setTitle:@"打开相机" forState:UIControlStateNormal];
+    [_openCameraBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
     [_openCameraBtn addTarget:self action:@selector(openCamera) forControlEvents:UIControlEventTouchUpInside];
     
 }
