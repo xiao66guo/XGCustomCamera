@@ -50,10 +50,6 @@
     UIColor                     *_popSwitchFontColor;
     // 记录字体选择的大小
     NSInteger                   textSize;
-    // 字体颜色按钮的选择状态
-    BOOL                        openColor;
-    // 字体大小按钮的选择状态
-    BOOL                        openSize;
 }
 
 - (void)viewDidLoad {
@@ -261,7 +257,12 @@
         if (textSize != 0 || _popSwitchFontColor != nil) {
             NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
             NSRange range = NSMakeRange(0, waterText.length);
-            [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:textSize],NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+            if (textSize != 0) {
+                [waterText addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:textSize]} range:range];
+            }
+            if (_popSwitchFontColor != nil) {
+                [waterText addAttributes:@{NSForegroundColorAttributeName:_popSwitchFontColor} range:range];
+            }
             [waterText drawInRect:_waterLable.frame];
         }else{
             [_waterLable.attributedText drawInRect:_waterLable.frame];
@@ -360,7 +361,6 @@
 
 #pragma mark - 改变签名文字的颜色
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
-    openColor = !sender.isSelected;
     XGSwitchColorController *switchColor = [XGSwitchColorController new];
     switchColor.bgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
@@ -371,8 +371,6 @@
 
 #pragma mark - 改变签名字体的大小
 -(void)changeSignatureWithFontSize:(UIButton *)sender{
-    NSLog(@"%zd",sender.isSelected);
-    openSize = !sender.isSelected;
     XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
     switchSize.fontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
