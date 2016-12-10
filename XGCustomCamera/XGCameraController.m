@@ -350,7 +350,7 @@
         // 取出textField中的内容
         NSString *sigContent = textContent.text;
         _waterLable.text = sigContent;
-        _waterLable.textAlignment = _waterLable.text.length >= 20 ? NSTextAlignmentLeft : NSTextAlignmentCenter;
+        _waterLable.textAlignment = _waterLable.text.length >= 15? NSTextAlignmentLeft : NSTextAlignmentCenter;
     }];
     // 将确认按钮添加到弹框
     [tipView addAction:sure];
