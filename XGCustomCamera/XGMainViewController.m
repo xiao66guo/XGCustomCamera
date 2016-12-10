@@ -27,7 +27,7 @@
     _openCameraBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 150)];
     _openCameraBtn.center = self.view.center;
     [self.view addSubview:_openCameraBtn];
-    [_openCameraBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
+    [_openCameraBtn setImage:[UIImage imageNamed:@"Camera"] forState:UIControlStateNormal];
     [_openCameraBtn addTarget:self action:@selector(openCamera) forControlEvents:UIControlEventTouchUpInside];
     
 }
