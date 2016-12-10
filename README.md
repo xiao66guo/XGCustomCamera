@@ -57,7 +57,6 @@
 ```
 通过PopOVer的方式实现字体大小和颜色选择的相关代码：
 ```
-#pragma mark - 改变签名文字的颜色
 -(void)addChangeSignWithFontColor:(UIButton *)sender{
     XGSwitchColorController *switchColor = [XGSwitchColorController new];
     switchColor.bgColor = ^(UIColor *cellColor){
@@ -66,8 +65,6 @@
     };
     [self setupPopViewWithAttribute:switchColor andView:sender];
 }
-
-#pragma mark - 改变签名字体的大小
 -(void)changeSignatureWithFontSize:(UIButton *)sender{
     XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
     switchSize.fontSize = ^(NSInteger fontSize){
@@ -76,8 +73,6 @@
     };
     [self setupPopViewWithAttribute:switchSize andView:sender];
 }
-
-#pragma mark - pop展现视图的公共方法
 -(void)setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
     vc.modalPresentationStyle = UIModalPresentationPopover;
     vc.preferredContentSize = CGSizeMake(60, 200);
