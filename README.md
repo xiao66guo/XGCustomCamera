@@ -79,10 +79,8 @@
     vc.popoverPresentationController.delegate = self;
     vc.popoverPresentationController.sourceView = view;
     vc.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
-    
     CGSize size = view.bounds.size;
     vc.popoverPresentationController.sourceRect = CGRectMake(size.width * 0.5, -5, 0, 0);
-    
     [self presentViewController:vc animated:YES completion:nil];
 }
 ```
