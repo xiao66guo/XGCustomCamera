@@ -57,23 +57,23 @@
 ```
 通过PopOVer的方式实现字体大小和颜色选择的相关代码：
 ```
--(void)addChangeSignWithFontColor:(UIButton *)sender{
+-(void)xg_addChangeSignWithFontColor:(UIButton *)sender{
     XGSwitchColorController *switchColor = [XGSwitchColorController new];
-    switchColor.bgColor = ^(UIColor *cellColor){
+    switchColor.xg_BgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
         _popSwitchFontColor = cellColor;
     };
-    [self setupPopViewWithAttribute:switchColor andView:sender];
+    [self xg_setupPopViewWithAttribute:switchColor andView:sender];
 }
--(void)changeSignatureWithFontSize:(UIButton *)sender{
+-(void)xg_changeSignatureWithFontSize:(UIButton *)sender{
     XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
-    switchSize.fontSize = ^(NSInteger fontSize){
+    switchSize.xg_FontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
         textSize = fontSize;
     };
-    [self setupPopViewWithAttribute:switchSize andView:sender];
+    [self xg_setupPopViewWithAttribute:switchSize andView:sender];
 }
--(void)setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
+-(void)xg_setupPopViewWithAttribute:(UIViewController *)vc andView:(UIView *)view{
     vc.modalPresentationStyle = UIModalPresentationPopover;
     vc.preferredContentSize = CGSizeMake(60, 200);
     vc.popoverPresentationController.delegate = self;
