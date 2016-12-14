@@ -17,7 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _sizeArray = @[@6,@8,@9,@10,@11,@12,@14,@16,@18,@20,@22,@24];
-    UITableView *table = [[UITableView alloc] init];
+    UITableView *table = UITableView.new;
     table.dataSource = self;
     table.delegate = self;
     table.showsVerticalScrollIndicator = NO;

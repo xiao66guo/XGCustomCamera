@@ -54,7 +54,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = UIColor.blackColor;
     
     // 布局相机底部的按钮
     [self xg_layoutCameraBottomWithBtn];
@@ -87,8 +87,8 @@
     
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
-    _imageOutPut = [AVCaptureStillImageOutput new];
-    _captureSession = [AVCaptureSession new];
+    _imageOutPut = AVCaptureStillImageOutput.new;
+    _captureSession = AVCaptureSession.new;
     
     if (![_captureSession canAddInput:_inputDevice]) {
         NSLog(@"无法添加输入设备");
@@ -257,8 +257,8 @@
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     
     _signatureBtn.enabled = !emptyTitle;
-    _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
-    _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
+    _signatureBtn.backgroundColor = emptyTitle ? UIColor.lightGrayColor : UIColor.whiteColor;
+    _signatureBtn.layer.borderColor = emptyTitle ? UIColor.lightGrayColor.CGColor : UIColor.greenColor.CGColor;
     _fontColorBtn.enabled = !emptyTitle;
     _fontSizeBtn.enabled = !emptyTitle;
 }
@@ -310,7 +310,7 @@
 
 #pragma mark - 改变签名文字的颜色
 -(void)xg_addChangeSignWithFontColor:(UIButton *)sender{
-    XGSwitchColorController *switchColor = [XGSwitchColorController new];
+    XGSwitchColorController *switchColor = XGSwitchColorController.new;
     switchColor.xg_BgColor = ^(UIColor *cellColor){
         _waterLable.textColor = cellColor;
         _popSwitchFontColor = cellColor;
@@ -320,7 +320,7 @@
 
 #pragma mark - 改变签名字体的大小
 -(void)xg_changeSignatureWithFontSize:(UIButton *)sender{
-    XGSwitchFontSizeController *switchSize = [XGSwitchFontSizeController new];
+    XGSwitchFontSizeController *switchSize = XGSwitchFontSizeController.new;
     switchSize.xg_FontSize = ^(NSInteger fontSize){
         _waterLable.font = [UIFont systemFontOfSize:fontSize];
         textSize = fontSize;
@@ -353,14 +353,14 @@
 #pragma mark - 布局相机底部的按钮
 -(void)xg_layoutCameraBottomWithBtn{
     // 预览视图
-    UIView *previewView = [UIView new];
-    previewView.backgroundColor = [UIColor whiteColor];
+    UIView *previewView = UIView.new;
+    previewView.backgroundColor = UIColor.whiteColor;
     previewView.frame = CGRectMake(0, 0, ScreenW, ScreenH * 0.8);
     [self.view addSubview:previewView];
     _previewView = previewView;
     
     // 拍照按钮
-    UIButton *patPic = [UIButton new];
+    UIButton *patPic = UIButton.new;
     patPic.titleLabel.font = [UIFont boldSystemFontOfSize:40];
     UIImage *patPicImage = [UIImage imageNamed:@"camera_pat"];
     [patPic setBackgroundImage:patPicImage forState:UIControlStateNormal];
@@ -372,7 +372,7 @@
     [patPic addTarget:self action:@selector(xg_captureWithPicture) forControlEvents:UIControlEventTouchUpInside];
     
     // 关闭按钮
-    UIButton *closeBtn = [UIButton new];
+    UIButton *closeBtn = UIButton.new;
     UIImage *closeImage = [UIImage imageNamed:@"camera_close"];
     [closeBtn setImage:closeImage forState:UIControlStateNormal];
     [closeBtn setImage:[UIImage imageNamed:@"camera_close_pressed"] forState:UIControlStateHighlighted];
@@ -384,7 +384,7 @@
     [closeBtn addTarget:self action:@selector(xg_dissWithCameraVC) forControlEvents:UIControlEventTouchUpInside];
     
     // 镜头旋转和分享按钮
-    UIButton *rotateShare = [UIButton new];
+    UIButton *rotateShare = UIButton.new;
     UIImage *roShareImage = [UIImage imageNamed:@"camera_change"];
     CGFloat roShareW = roShareImage.size.width;
     CGFloat roShareH = roShareImage.size.height;
@@ -395,22 +395,22 @@
     [rotateShare addTarget:self action:@selector(xg_switchCapture) forControlEvents:UIControlEventTouchUpInside];
     
     // 签名按钮
-    UIButton *signatureBtn = [UIButton new];
-    signatureBtn.backgroundColor = [UIColor whiteColor];
+    UIButton *signatureBtn = UIButton.new;
+    signatureBtn.backgroundColor = UIColor.whiteColor;
     signatureBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
     [signatureBtn setTitle:@"签  名" forState:UIControlStateNormal];
-    [signatureBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [signatureBtn setTitleColor:UIColor.blueColor forState:UIControlStateNormal];
     signatureBtn.frame = CGRectMake(CGRectGetMaxX(closeBtn.frame) + XGCameraSubViewMargin, closeBtn.y, 60, closeBtnH);
     signatureBtn.layer.cornerRadius = 16;
     signatureBtn.layer.borderWidth = 3;
-    signatureBtn.layer.borderColor = [UIColor greenColor].CGColor;
+    signatureBtn.layer.borderColor = UIColor.greenColor.CGColor;
     signatureBtn.clipsToBounds = YES;
     [self.view addSubview:signatureBtn];
     _signatureBtn = signatureBtn;
     [signatureBtn addTarget:self action:@selector(xg_setupSignature) forControlEvents:UIControlEventTouchUpInside];
     
     // 字体颜色
-    UIButton *fontColorBtn = [UIButton new];
+    UIButton *fontColorBtn = UIButton.new;
     [fontColorBtn setImage:[UIImage imageNamed:@"fontColor"] forState:UIControlStateNormal];
     fontColorBtn.frame = CGRectMake(CGRectGetMinX(rotateShare.frame)-XGCameraSubViewMargin-roShareW, rotateShare.y, roShareW, roShareH);
     [self.view addSubview:fontColorBtn];
@@ -418,7 +418,7 @@
     _fontColorBtn = fontColorBtn;
     
     // 字体大小
-    UIButton *fontSizeBtn = [UIButton new];
+    UIButton *fontSizeBtn = UIButton.new;
     [fontSizeBtn setImage:[UIImage imageNamed:@"fontSize"] forState:UIControlStateNormal];
     fontSizeBtn.frame = CGRectMake(CGRectGetMinX(fontColorBtn.frame) - XGCameraSubViewMargin - fontColorBtn.width, fontColorBtn.y, fontColorBtn.width, fontColorBtn.height);
     [self.view addSubview:fontSizeBtn];
@@ -428,17 +428,17 @@
 
 #pragma mark -为照片添加水印图片
 -(void)xg_addWaterMarkPictureAndText{
-    UIImageView *waterPicture = [UIImageView new];
+    UIImageView *waterPicture = UIImageView.new;
     waterPicture.image = [UIImage imageNamed:@"water"];
     waterPicture.contentMode = 0;
     waterPicture.frame = CGRectMake(0, CGRectGetMaxY(_previewView.frame) - 80, ScreenW, 80);
     [self.view addSubview:waterPicture];
     _waterPicture = waterPicture;
     
-    UILabel *waterLable = [UILabel new];
+    UILabel *waterLable = UILabel.new;
     waterLable.textAlignment = NSTextAlignmentCenter;
     waterLable.text = @"拍照之前别忘了签名哦😊";
-    waterLable.textColor = [UIColor magentaColor];
+    waterLable.textColor = UIColor.magentaColor;
     waterLable.numberOfLines = 0;
     waterLable.font = [UIFont systemFontOfSize:15];
     [waterLable sizeToFit];
@@ -453,7 +453,7 @@
 -(void)xg_addSavePictureTipMessage{
     UILabel *tipLab = [UILabel new];
     tipLab.text = @"照片保存成功🎁";
-    tipLab.textColor = [UIColor whiteColor];
+    tipLab.textColor = UIColor.whiteColor;
     tipLab.font = [UIFont boldSystemFontOfSize:16];
     [tipLab sizeToFit];
     CGFloat tipLabW = tipLab.size.width;

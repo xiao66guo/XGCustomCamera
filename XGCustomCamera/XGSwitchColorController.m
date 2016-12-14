@@ -16,8 +16,8 @@ static NSString *ID = @"cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UITableView *table = [[UITableView alloc] init];
-    [table registerClass:[UITableViewCell class] forCellReuseIdentifier:ID];
+    UITableView *table = UITableView.new;
+    [table registerClass:UITableViewCell.class forCellReuseIdentifier:ID];
     table.dataSource = self;
     table.delegate = self;
     table.showsVerticalScrollIndicator = NO;
@@ -32,7 +32,7 @@ static NSString *ID = @"cell";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     UILabel *bgLab = [[UILabel alloc] initWithFrame:CGRectMake(10, 12, 40, 20)];
-    bgLab.backgroundColor = [UIColor xg_randomColor];
+    bgLab.backgroundColor = UIColor.xg_randomColor;
     [cell.contentView addSubview:bgLab];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
