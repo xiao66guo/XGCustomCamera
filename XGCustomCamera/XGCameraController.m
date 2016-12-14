@@ -83,18 +83,13 @@
 #pragma mark - 设置拍摄的会话内容
 -(void)xg_setupCaptureSession{
     
-    // 摄像头的切换
     AVCaptureDevice *device = [self xg_captureChangeDevice];
     
-    // 输入设备
     _inputDevice = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
     
-    // 输出图像
     _imageOutPut = [AVCaptureStillImageOutput new];
-    // 拍摄会话
     _captureSession = [AVCaptureSession new];
     
-    // 将输入和输出添加到拍摄会话
     if (![_captureSession canAddInput:_inputDevice]) {
         NSLog(@"无法添加输入设备");
         return;
@@ -107,30 +102,21 @@
     [_captureSession addInput:_inputDevice];
     [_captureSession addOutput:_imageOutPut];
     
-    // 设置预览图层
     _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
-    // 指定预览图层的大小
     _previewLayer.frame = _previewView.frame;
     
-    // 添加图层到预览视图
     [_previewView.layer addSublayer:_previewLayer];
-    
-    // 设置取景框的拉伸效果
     _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
-    // 开始拍摄
     [self xg_startCapture];
 }
 
 #pragma mark - 切换摄像头(如果_inputDevice没有值，默认返回后置摄像头）
 -(AVCaptureDevice *)xg_captureChangeDevice{
-    // 获得当前输入设备的摄像头的位置
     AVCaptureDevicePosition position = _inputDevice.device.position;
     
     position = (position != AVCaptureDevicePositionBack) ? AVCaptureDevicePositionBack : AVCaptureDevicePositionFront;
-    // 设备（摄像头<视频/照片>,麦克风<音频>）,返回摄像头的数组
     NSArray *deviceArray = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    //     取出后置摄像头
     AVCaptureDevice *device;
     for (AVCaptureDevice *sub in deviceArray) {
         if (sub.position == position) {
@@ -143,36 +129,25 @@
 
 #pragma mark - 镜头切换按钮的实现方法
 -(void)xg_switchCapture{
-    
-    // 如果当前不是正在拍摄，就执行分享的方法
     if (!_captureSession.isRunning) {
-       
         [self xg_setupSharePicture];
         return;
     }
     
     AVCaptureDevice *device = [self xg_captureChangeDevice];
-    // 创建输入设备
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:NULL];
-    // 停止之前的输入设备
     [self xg_stopCapture];
     
-    // 删除之前的输入设备(如果要添加输入设备，需要将之前的输入设备删除，否则后面的输入设备将添加不进来)
     [_captureSession removeInput:_inputDevice];
-    
-    // 判断设备是否能被切换
     if ([_captureSession canAddInput:input]) {
         _inputDevice = input;
     }
-    // 添加到会话
     [_captureSession addInput:_inputDevice];
-    // 重新开启会话
     [self xg_startCapture];
 }
 
 #pragma mark - 分享照片的方法
 -(void)xg_setupSharePicture{
-    // 如果没有照片就直接返回
     if (nil == _captureDonePicture) {
         return;
     }
@@ -223,37 +198,24 @@
 -(void)xg_captureWithPicture{
 
     [self xg_patPicBtnWithAnimation];
-    // AVCaptureConnection : 表示图像和摄像头的连接
     AVCaptureConnection *capCon = _imageOutPut.connections.firstObject;
     if (capCon == nil) {
         NSLog(@"无法连接到摄像头");
         return;
     }
-    // 拍摄照片(imageDataSampleBuffer:图像数据采样缓冲区)
     [_imageOutPut captureStillImageAsynchronouslyFromConnection:capCon completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-        // 判断图像缓冲区是否有数据
         if (imageDataSampleBuffer == nil) {
-            NSLog(@"图像缓冲区中没有数据");
+            NSLog(@"图像缓冲区中没有图像");
             return ;
         }
-        // 从图像采样缓冲区生成照片的数据
         NSData *data = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
         
-        // 生成图像
         UIImage *image = [UIImage imageWithData:data];
-        
-        // 将图像不在预览图层中的内容裁掉
-        // 预览视图的大小
         CGRect rect = _previewView.bounds;
-        // 重新计算才剪掉的大小
         CGFloat offset = (self.view.height - rect.size.height) * 0.5;
-        // 通过图像上下文来裁剪图像的真实的大小
         UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0);
-        // 绘制图像
         [image drawInRect:CGRectInset(rect, 0, -offset)];
-        // 绘制水印图像
         [_waterPicture.image drawInRect:_waterPicture.frame];
-        // 绘制水印文字
         if (textSize != 0 || _popSwitchFontColor != nil) {
             NSMutableAttributedString *waterText = [[NSMutableAttributedString alloc] initWithString:_waterLable.text];
             NSRange range = NSMakeRange(0, waterText.length);
@@ -268,12 +230,9 @@
             [_waterLable.attributedText drawInRect:_waterLable.frame];
         }
         
-        // 从图像上下文中获取绘制的结果
         UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
-        // 关闭图像上下文
         UIGraphicsEndImageContext();
         
-        // 保存图像
         UIImageWriteToSavedPhotosAlbum(resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
     }];
 
@@ -281,30 +240,22 @@
 
 #pragma mark - 拍照按钮动画方法
 -(void)xg_patPicBtnWithAnimation{
-    // 确认拍照按钮的标题
     BOOL emptyTitle = (_patPicBtn.currentTitle == nil);
     NSString *title = emptyTitle ? @"✓" : nil;
-    // 设置按钮的标题
     [_patPicBtn setTitle:title forState:UIControlStateNormal];
     
-    // 设置按钮的动画
     [UIView transitionWithView:_patPicBtn duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:^(BOOL finished) {
-        // 如果标题没有文字，表示处于拍摄的状态,要恢复到拍摄场景
         if (nil == title) {
             [self xg_startCapture];
         }
     }];
     
-    // 确定分享和旋转按钮的图像
     NSString *roShareIcon = emptyTitle ? @"pic_share" : @"camera_change";
-    // 设置按钮的图像
     [_rotateShare setImage:[UIImage imageNamed:roShareIcon] forState:UIControlStateNormal];
     NSString *pressImage = [NSString stringWithFormat:@"%@_pressed",roShareIcon];
     [_rotateShare setImage:[UIImage imageNamed:pressImage] forState:UIControlStateHighlighted];
-    // 设置切换的动画
     [UIView transitionWithView:_rotateShare duration:XGSavePictureAnimationDuration options:UIViewAnimationOptionTransitionFlipFromLeft animations:nil completion:nil];
     
-    // 如果拍照按钮的标题没有值时，就让签名按钮和字体颜色选择按钮可用
     _signatureBtn.enabled = !emptyTitle;
     _signatureBtn.backgroundColor = emptyTitle ? [UIColor lightGrayColor] : [UIColor whiteColor];
     _signatureBtn.layer.borderColor = emptyTitle ? [UIColor lightGrayColor].CGColor : [UIColor greenColor].CGColor;
@@ -317,7 +268,6 @@
     NSString *msg = (error == nil) ? @"照片保存成功🎁" : @"照片保存失败💔";
     _saveTipLable.text = msg;
     
-    // 保存照片时让整个画面处于静止的状态
     [self xg_stopCapture];
     
     [UIView animateWithDuration:XGSavePictureAnimationDuration delay:0.5 options:0 animations:^{
@@ -327,7 +277,6 @@
            _saveTipLable.alpha = 0.0;
        }];
     }];
-    // 记录拍照完成的照片
     _captureDonePicture = image;
 }
 
