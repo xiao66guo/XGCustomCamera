@@ -6,8 +6,8 @@
 //  Copyright © 2016年 小果. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XGBaseController.h"
 
-@interface XGSwitchFontSizeController : UIViewController
+@interface XGSwitchFontSizeController : XGBaseController
 @property (nonatomic, copy) void (^xg_FontSize)(NSInteger fontSize);
 @end

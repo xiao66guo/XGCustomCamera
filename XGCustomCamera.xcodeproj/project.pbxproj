@@ -18,6 +18,7 @@
 		DB5C67BE1DF6FFFB009FEA92 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = DB5C67BD1DF6FFFB009FEA92 /* UIView+Extension.m */; };
 		DB8E39261DF992E8009531DC /* XGSwitchColorController.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8E39251DF992E8009531DC /* XGSwitchColorController.m */; };
 		DB8E39291DF993C2009531DC /* UIColor+Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8E39281DF993C2009531DC /* UIColor+Tools.m */; };
+		DBB9B4491E00E36A006D27EA /* XGBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = DBB9B4481E00E36A006D27EA /* XGBaseController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,8 @@
 		DB8E39271DF993C2009531DC /* UIColor+Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Tools.h"; sourceTree = "<group>"; };
 		DB8E39281DF993C2009531DC /* UIColor+Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Tools.m"; sourceTree = "<group>"; };
 		DB8F886F1DF91E6300AE191E /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		DBB9B4471E00E36A006D27EA /* XGBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGBaseController.h; sourceTree = "<group>"; };
+		DBB9B4481E00E36A006D27EA /* XGBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XGBaseController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +103,8 @@
 				DB8E39251DF992E8009531DC /* XGSwitchColorController.m */,
 				DB43B4DF1DFAA10200FA6C35 /* XGSwitchFontSizeController.h */,
 				DB43B4E01DFAA10200FA6C35 /* XGSwitchFontSizeController.m */,
+				DBB9B4471E00E36A006D27EA /* XGBaseController.h */,
+				DBB9B4481E00E36A006D27EA /* XGBaseController.m */,
 				DB5C67AB1DF6DEFD009FEA92 /* LaunchScreen.storyboard */,
 				DB5C67AE1DF6DEFD009FEA92 /* Info.plist */,
 				DB5C67BA1DF6F8D4009FEA92 /* PrefixHeader.pch */,
@@ -259,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB5C67BE1DF6FFFB009FEA92 /* UIView+Extension.m in Sources */,
+				DBB9B4491E00E36A006D27EA /* XGBaseController.m in Sources */,
 				DB8E39291DF993C2009531DC /* UIColor+Tools.m in Sources */,
 				DB5C67A21DF6DEFD009FEA92 /* AppDelegate.m in Sources */,
 				DB5C67B61DF6DF89009FEA92 /* XGMainViewController.m in Sources */,

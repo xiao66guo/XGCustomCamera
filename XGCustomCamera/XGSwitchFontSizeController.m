@@ -8,22 +8,13 @@
 
 #import "XGSwitchFontSizeController.h"
 
-@interface XGSwitchFontSizeController ()<UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic, strong) NSArray *sizeArray;
-@end
-
-@implementation XGSwitchFontSizeController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
+@interface XGSwitchFontSizeController ()@end
+@implementation XGSwitchFontSizeController{
+    NSArray *_sizeArray;
+}
+-(void)setupUI{
     _sizeArray = @[@6,@8,@9,@10,@11,@12,@14,@16,@18,@20,@22,@24];
-    UITableView *table = UITableView.new;
-    table.dataSource = self;
-    table.delegate = self;
-    table.showsVerticalScrollIndicator = NO;
-    table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    table.frame = CGRectMake(0, 0, 60, 200);
-    [self.view addSubview:table];
+
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

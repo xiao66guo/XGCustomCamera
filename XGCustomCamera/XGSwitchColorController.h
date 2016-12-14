@@ -6,8 +6,8 @@
 //  Copyright © 2016年 小果. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XGBaseController.h"
 
-@interface XGSwitchColorController : UIViewController
+@interface XGSwitchColorController : XGBaseController
 @property (nonatomic, copy) void (^xg_BgColor)(UIColor *fontColor);
 @end

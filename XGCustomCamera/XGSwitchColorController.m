@@ -8,22 +8,12 @@
 
 #import "XGSwitchColorController.h"
 #import "UIColor+Tools.h"
-@interface XGSwitchColorController ()<UITableViewDataSource,UITableViewDelegate>
-
-@end
+@interface XGSwitchColorController ()@end
 static NSString *ID = @"cell";
 @implementation XGSwitchColorController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    UITableView *table = UITableView.new;
-    [table registerClass:UITableViewCell.class forCellReuseIdentifier:ID];
-    table.dataSource = self;
-    table.delegate = self;
-    table.showsVerticalScrollIndicator = NO;
-    table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    table.frame = CGRectMake(0, 0, 60, 200);
-    [self.view addSubview:table];
+-(void)setupUI{
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ID];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
