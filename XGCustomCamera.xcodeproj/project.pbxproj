@@ -390,7 +390,7 @@
 				DEVELOPMENT_TEAM = 24T58AANZ9;
 				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -405,7 +405,7 @@
 				DEVELOPMENT_TEAM = 24T58AANZ9;
 				GCC_PREFIX_HEADER = XGCustomCamera/PrefixHeader.pch;
 				INFOPLIST_FILE = XGCustomCamera/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaoguo.XGCustomCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
